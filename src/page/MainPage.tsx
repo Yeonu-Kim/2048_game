@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 import Footer from '../components/Footer.tsx';
+import Board from '../components/game/Board.tsx';
 import Header from '../components/Header.tsx';
 import { StyledContainer } from '../components/styles/Container.styled.tsx';
 
@@ -9,6 +10,7 @@ const MainPage = () => {
     <StyledBackground>
       <StyledMainContainer gap={5}>
         <Header />
+        <Board />
         <Footer />
       </StyledMainContainer>
     </StyledBackground>

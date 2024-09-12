@@ -8,6 +8,7 @@ interface StyledContainerProps {
     | 'primary'
     | 'secondary'
     | 'secondaryBright'
+    | 'secondaryDark'
     | 'default';
   color?: 'white' | 'black' | 'primary' | 'secondary' | 'secondaryBright';
   width?: number;
