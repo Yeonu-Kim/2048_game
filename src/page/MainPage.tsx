@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+import Footer from '../components/Footer.tsx';
 import Header from '../components/Header.tsx';
 import { StyledContainer } from '../components/styles/Container.styled.tsx';
 
@@ -8,6 +9,7 @@ const MainPage = () => {
     <StyledBackground>
       <StyledMainContainer gap={5}>
         <Header />
+        <Footer />
       </StyledMainContainer>
     </StyledBackground>
   );
