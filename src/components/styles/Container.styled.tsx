@@ -44,27 +44,27 @@ export const StyledContainer = styled(createFlexContainer())`
         : 'flex-start'};
 `;
 
-// export const StyledFullContainer = styled(createFlexContainer())`
-//   justify-content: space-between;
-// `;
+export const StyledFullContainer = styled(createFlexContainer())`
+  justify-content: space-between;
+`;
 
-// export const StyledContainerH = styled(createFlexContainer('row'))`
-//   justify-content: ${({ alignH }) =>
-//     alignH === 'center'
-//       ? 'center'
-//       : alignH === 'right'
-//         ? 'flex-end'
-//         : 'flex-start'};
-//   text-align: ${({ alignH }) => alignH};
-//   align-items: ${({ align }) =>
-//     align === 'center'
-//       ? 'center'
-//       : align === 'right'
-//         ? 'flex-end'
-//         : 'flex-start'};
-// `;
+export const StyledContainerH = styled(createFlexContainer('row'))`
+  justify-content: ${({ alignH }) =>
+    alignH === 'center'
+      ? 'center'
+      : alignH === 'right'
+        ? 'flex-end'
+        : 'flex-start'};
+  text-align: ${({ alignH }) => alignH};
+  align-items: ${({ align }) =>
+    align === 'center'
+      ? 'center'
+      : align === 'right'
+        ? 'flex-end'
+        : 'flex-start'};
+`;
 
-// export const StyledFullContainerH = createFlexContainer('row');
+export const StyledFullContainerH = createFlexContainer('row');
 
 // export const StyledFadeUpContainerH = styled(StyledContainerH)`
 //   animation: ${fadeInUp} 0.8s ease forwards;
