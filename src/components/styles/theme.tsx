@@ -8,9 +8,11 @@ interface ColorProps {
   secondaryBright: string;
 }
 
-interface PixelProps {
-  grid_size: number;
-  cell_size: number;
+interface FontSizeProps {
+  XL: number;
+  L: number;
+  R: number;
+  S: number;
 }
 
 const color: ColorProps = {
@@ -23,14 +25,16 @@ const color: ColorProps = {
   secondaryBright: 'rgba(238, 228, 218, 0.35)',
 };
 
-const pixel: PixelProps = {
-  grid_size: 4,
-  cell_size: 11,
+const font: FontSizeProps = {
+  XL: 4.8,
+  L: 3.2,
+  R: 1.6,
+  S: 1.2,
 };
 
 const theme = {
   color,
-  pixel,
+  font,
 };
 
 export type ThemeProps = typeof theme;
