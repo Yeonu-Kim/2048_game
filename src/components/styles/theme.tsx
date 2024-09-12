@@ -17,8 +17,7 @@ interface FontSizeProps {
 }
 
 interface PixelProps {
-  gridSize: 4;
-  cellSize: 11;
+  cellSize: number;
 }
 
 const color: ColorProps = {
@@ -40,7 +39,6 @@ const font: FontSizeProps = {
 };
 
 const pixel: PixelProps = {
-  gridSize: 4,
   cellSize: 11,
 };
 
