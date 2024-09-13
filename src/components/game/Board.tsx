@@ -3,12 +3,11 @@ import styled from 'styled-components';
 
 import Cell from './Cell';
 interface BoardProps {
-  cells: (number | null)[];
+  cells: (number | null)[][];
 }
 
 const Board: React.FC<BoardProps> = ({ cells }) => {
   const totalCellsCount = 16;
-  const rowCellsCount = 4;
 
   const renderBackgroundCell = () => {
     return Array.from({ length: totalCellsCount }, (_, index) => (
@@ -17,13 +16,15 @@ const Board: React.FC<BoardProps> = ({ cells }) => {
   };
 
   const renderCells = () => {
-    return cells.map((value, index) => {
-      const position = [
-        index % rowCellsCount,
-        Math.floor(index / rowCellsCount),
-      ];
-      return <Cell key={index} position={position} value={value} />;
-    });
+    return cells.map((cellRow, rowIndex) =>
+      cellRow.map((value, colIndex) => (
+        <Cell
+          key={`${rowIndex}-${colIndex}`}
+          position={[rowIndex, colIndex]}
+          value={value}
+        />
+      )),
+    );
   };
 
   return (

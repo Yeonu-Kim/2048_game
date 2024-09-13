@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 interface CellProps {
   position: number[];
@@ -12,8 +12,8 @@ interface StyledCellProps {
 }
 
 const Cell: React.FC<CellProps> = ({ position, value }) => {
-  const left = position[0] ?? 0;
-  const top = position[1] ?? 0;
+  const top = position[0] ?? 0;
+  const left = position[1] ?? 0;
 
   const getCell = () => {
     switch (value) {
@@ -59,11 +59,24 @@ const Cell: React.FC<CellProps> = ({ position, value }) => {
             {value}
           </Cell128>
         );
+      default:
+        return null;
     }
   };
 
   return <>{getCell()}</>;
 };
+
+const show = keyframes`
+  0% {
+    opacity: 0.5;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+`;
 
 const StyledCell = styled.div<StyledCellProps>`
   display: flex;
@@ -81,6 +94,7 @@ const StyledCell = styled.div<StyledCellProps>`
   color: ${({ theme }) => theme.color.secondaryDark};
   transition-property: left, top, transform;
   transition-duration: 200ms, 200ms, 100ms;
+  animation: ${show} 200ms ease-in-out;
 `;
 
 const Cell2 = styled(StyledCell)`
