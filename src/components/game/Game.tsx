@@ -23,12 +23,11 @@ const Game = () => {
 
   const addTwoRandomCells = useCallback(() => {
     const emptyCells = getEmptyCellsIndex();
-    console.error('renderd!');
 
     if (emptyCells.length < 16) return;
 
     const randomIndices = emptyCells
-      .sort(() => Math.random() - 0.5)
+      .sort(() => Math.random() - 0.5) // 양수 나올 확률 vs 음수 나올 확률로 랜덤 정렬
       .slice(0, 2);
 
     const newCells = [...cells].map((row) => [...row]);
