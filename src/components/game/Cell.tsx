@@ -59,6 +59,8 @@ const Cell: React.FC<CellProps> = ({ position, value }) => {
             {value}
           </Cell128>
         );
+      default:
+        return null;
     }
   };
 
