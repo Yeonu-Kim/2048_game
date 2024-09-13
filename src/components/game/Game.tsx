@@ -63,7 +63,7 @@ const Game = () => {
           return Array.from({ length: columnLength }, (_, columnIndex) =>
             Array.from(
               { length: rowLength },
-              (_, rowIndex) =>
+              (__, rowIndex) =>
                 prevCells[rowIndex]?.[columnLength - columnIndex - 1] ?? null,
             ),
           );
@@ -71,7 +71,7 @@ const Game = () => {
           return Array.from({ length: rowLength }, (_, rowIndex) =>
             Array.from(
               { length: columnLength },
-              (_, columnIndex) =>
+              (__, columnIndex) =>
                 prevCells[rowLength - rowIndex - 1]?.[
                   columnLength - columnIndex - 1
                 ] ?? null,
@@ -81,7 +81,7 @@ const Game = () => {
           return Array.from({ length: columnLength }, (_, columnIndex) =>
             Array.from(
               { length: rowLength },
-              (_, rowIndex) =>
+              (__, rowIndex) =>
                 prevCells[rowLength - rowIndex - 1]?.[columnIndex] ?? null,
             ),
           );
