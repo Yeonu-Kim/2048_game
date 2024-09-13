@@ -14,7 +14,7 @@ const Header = () => {
   };
   return (
     <StyledFullContainerH>
-      <StyledContainer width={70} color="black">
+      <StyledContainer width={70} color="secondaryDark">
         <StyledFont size="XL" bold>
           2048
         </StyledFont>

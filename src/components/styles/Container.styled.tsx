@@ -10,7 +10,13 @@ interface StyledContainerProps {
     | 'secondaryBright'
     | 'secondaryDark'
     | 'default';
-  color?: 'white' | 'black' | 'primary' | 'secondary' | 'secondaryBright';
+  color?:
+    | 'white'
+    | 'black'
+    | 'primary'
+    | 'secondary'
+    | 'secondaryBright'
+    | 'secondaryDark';
   width?: number;
   align?: 'left' | 'center' | 'right';
   alignH?: 'left' | 'center' | 'right';
