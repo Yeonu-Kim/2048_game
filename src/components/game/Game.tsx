@@ -37,7 +37,6 @@ const Game = () => {
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       event.preventDefault();
-      console.error(event.code);
       switch (event.code) {
         case 'ArrowUp':
           moveCellsByDirection('up');
