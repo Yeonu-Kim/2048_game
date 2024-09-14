@@ -56,13 +56,16 @@ const Game = () => {
     [moveCellsByDirection],
   );
 
-  useEffect(addTwoRandomCells, [addTwoRandomCells]);
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-
+  const handleIsMoved = useCallback(() => {
     if (isMoved) {
       addOneRandomCell();
     }
+  }, [isMoved, addOneRandomCell]);
+
+  useEffect(addTwoRandomCells, [addTwoRandomCells]);
+  useEffect(handleIsMoved, [handleIsMoved]);
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
