@@ -5,7 +5,14 @@ import useMoveLeft from './useMoveLeft';
 import useRotateCells from './useRotateCells';
 
 const useGame = () => {
-  const { cells, setCells, addTwoRandomCells } = useGameBoard();
+  const {
+    isMoved,
+    cells,
+    setCells,
+    setIsMoved,
+    addTwoRandomCells,
+    addOneRandomCell,
+  } = useGameBoard();
   const { rotateMapCounterClockwise } = useRotateCells();
   const { moveLeft } = useMoveLeft();
 
@@ -17,13 +24,16 @@ const useGame = () => {
       const rotatedCells = rotateMapCounterClockwise(cells, rotateDirection);
       const moveResult = moveLeft(rotatedCells);
       setCells(rotateMapCounterClockwise(moveResult.result, revertDirection));
+      setIsMoved(moveResult.isMoved);
     },
-    [cells, rotateMapCounterClockwise, moveLeft, setCells],
+    [cells, moveLeft, rotateMapCounterClockwise, setCells, setIsMoved],
   );
 
   return {
+    isMoved,
     cells,
     addTwoRandomCells,
+    addOneRandomCell,
     moveCells,
   };
 };

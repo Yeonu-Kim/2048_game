@@ -27,8 +27,6 @@ const useRotateCells = () => {
               (__, rowIndex) => prevCells[3 - rowIndex]?.[colIndex] ?? null,
             ),
           );
-        default:
-          return prevCells;
       }
     },
     [],
