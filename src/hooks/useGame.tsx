@@ -6,8 +6,8 @@ import useRotateCells from './useRotateCells';
 
 const useGame = () => {
   const {
-    cells,
     isMoved,
+    cells,
     setCells,
     setIsMoved,
     addTwoRandomCells,
@@ -26,12 +26,12 @@ const useGame = () => {
       setCells(rotateMapCounterClockwise(moveResult.result, revertDirection));
       setIsMoved(moveResult.isMoved);
     },
-    [cells, rotateMapCounterClockwise, moveLeft, setCells, setIsMoved],
+    [cells, moveLeft, rotateMapCounterClockwise, setCells, setIsMoved],
   );
 
   return {
-    cells,
     isMoved,
+    cells,
     addTwoRandomCells,
     addOneRandomCell,
     moveCells,

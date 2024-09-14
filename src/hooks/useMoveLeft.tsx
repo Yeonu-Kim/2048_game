@@ -25,7 +25,7 @@ const useMoveLeft = () => {
 
     return {
       result: resultRow,
-      isMoved: row.some((cell, i) => cell !== result[i]),
+      isMoved: row.some((cell, i) => cell !== resultRow[i]),
     };
   }, []);
 
@@ -45,3 +45,7 @@ const useMoveLeft = () => {
 };
 
 export default useMoveLeft;
+
+/*
+
+*/

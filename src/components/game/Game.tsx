@@ -11,7 +11,7 @@ interface DirectionDegreeProps {
 }
 
 const Game = () => {
-  const { cells, isMoved, addTwoRandomCells, addOneRandomCell, moveCells } =
+  const { isMoved, cells, addTwoRandomCells, addOneRandomCell, moveCells } =
     useGame();
 
   const moveCellsByDirection = useCallback(
@@ -58,17 +58,16 @@ const Game = () => {
 
   useEffect(addTwoRandomCells, [addTwoRandomCells]);
   useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+
     if (isMoved) {
       addOneRandomCell();
     }
-  }, [isMoved, addOneRandomCell]);
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [handleKeyDown]);
+  }, [isMoved, handleKeyDown, addOneRandomCell]);
 
   return <Board cells={cells} />;
 };
