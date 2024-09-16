@@ -7,6 +7,7 @@ const useGameBoard = () => {
       .map(() => Array<null>(4).fill(null)),
   );
   const [isMoved, setIsMoved] = useState<boolean>(false);
+  const [history, setHistory] = useState<(number | null)[][][]>([]);
 
   const getEmptyCellsIndex = useCallback((): [number, number][] => {
     const emptyCells: [number, number][] = [];
@@ -19,6 +20,13 @@ const useGameBoard = () => {
     });
     return emptyCells;
   }, [cells]);
+
+  const saveCellsHistory = useCallback((newCells: (number | null)[][]) => {
+    setHistory((prevHistory: (number | null)[][][]) => [
+      ...prevHistory,
+      structuredClone(newCells),
+    ]);
+  }, []);
 
   const addTwoRandomCells = useCallback(() => {
     const emptyCells = getEmptyCellsIndex();
@@ -38,15 +46,37 @@ const useGameBoard = () => {
     });
 
     setCells(newCells);
+    setHistory([newCells]);
   }, [cells, getEmptyCellsIndex]);
+
+  const undo = useCallback(() => {
+    setHistory((prevHistory: (number | null)[][][]) => {
+      console.error(prevHistory);
+      if (prevHistory.length > 1) {
+        const newHistory = prevHistory.slice(0, -1);
+        const previousCells = newHistory[newHistory.length - 1] ?? null;
+
+        if (previousCells !== null) {
+          setCells(previousCells);
+        }
+
+        return newHistory;
+      }
+
+      return prevHistory;
+    });
+  }, []);
 
   return {
     cells,
     isMoved,
+    history,
     getEmptyCellsIndex,
     setCells,
     setIsMoved,
     addTwoRandomCells,
+    saveCellsHistory,
+    undo,
   };
 };
 

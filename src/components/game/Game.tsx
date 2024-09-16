@@ -2,6 +2,7 @@ import { useCallback, useEffect } from 'react';
 
 import { GameOverStatus } from '../../hooks/useGame.tsx';
 import useGame from '../../hooks/useGame.tsx';
+import Header from '../Header.tsx';
 import Board from './Board.tsx';
 
 interface DirectionDegreeProps {
@@ -16,9 +17,11 @@ const Game = () => {
     isMoved,
     cells,
     gameOver,
+    history,
     addTwoRandomCells,
     checkNextTurn,
     moveCells,
+    undo,
   } = useGame();
 
   const moveCellsByDirection = useCallback(
@@ -67,9 +70,10 @@ const Game = () => {
 
   const handleIsMoved = useCallback(() => {
     if (isMoved) {
+      console.error(history);
       checkNextTurn();
     }
-  }, [isMoved, checkNextTurn]);
+  }, [isMoved, checkNextTurn, history]);
 
   useEffect(addTwoRandomCells, [addTwoRandomCells]);
 
@@ -85,6 +89,7 @@ const Game = () => {
 
   return (
     <>
+      <Header undo={undo} />
       <Board cells={cells} gameOver={gameOver} />
     </>
   );
