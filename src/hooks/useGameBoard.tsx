@@ -40,33 +40,12 @@ const useGameBoard = () => {
     setCells(newCells);
   }, [cells, getEmptyCellsIndex]);
 
-  const addOneRandomCell = useCallback(() => {
-    const emptyCells = getEmptyCellsIndex();
-
-    if (emptyCells.length === 0) return;
-
-    const randomIndex = Math.floor(Math.random() * emptyCells.length);
-    // 이 조건 깔끔하게 처리할 수 있는 방법 확인
-    if (emptyCells[randomIndex] !== undefined) {
-      const [rowIndex, colIndex] = emptyCells[randomIndex];
-
-      const newCells = cells.map((row) => [...row]);
-
-      if (newCells[rowIndex] !== undefined) {
-        newCells[rowIndex][colIndex] = 2;
-      }
-      setCells(newCells);
-    }
-
-    setIsMoved(false);
-  }, [getEmptyCellsIndex, cells]);
-
   return {
     cells,
     isMoved,
+    getEmptyCellsIndex,
     setCells,
     setIsMoved,
-    addOneRandomCell,
     addTwoRandomCells,
   };
 };

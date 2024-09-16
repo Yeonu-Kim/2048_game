@@ -1,7 +1,9 @@
 import { useCallback, useEffect } from 'react';
 
 import useGame from '../../hooks/useGame.tsx';
+import { GameOverStatus } from '../../hooks/useGame.tsx';
 import Board from './Board.tsx';
+import { GameOverFailed, GameOverSuccess } from './GameOver.tsx';
 
 interface DirectionDegreeProps {
   up: 0 | 90 | 180 | 270;
@@ -11,8 +13,14 @@ interface DirectionDegreeProps {
 }
 
 const Game = () => {
-  const { isMoved, cells, addTwoRandomCells, addOneRandomCell, moveCells } =
-    useGame();
+  const {
+    isMoved,
+    cells,
+    gameOver,
+    addTwoRandomCells,
+    checkNextTurn,
+    moveCells,
+  } = useGame();
 
   const moveCellsByDirection = useCallback(
     (direction: 'up' | 'down' | 'left' | 'right') => {
@@ -58,21 +66,29 @@ const Game = () => {
 
   const handleIsMoved = useCallback(() => {
     if (isMoved) {
-      addOneRandomCell();
+      checkNextTurn();
     }
-  }, [isMoved, addOneRandomCell]);
+  }, [isMoved, checkNextTurn]);
 
   useEffect(addTwoRandomCells, [addTwoRandomCells]);
+
   useEffect(handleIsMoved, [handleIsMoved]);
+
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isMoved, handleKeyDown, addOneRandomCell]);
+  }, [isMoved, handleKeyDown]);
 
-  return <Board cells={cells} />;
+  return (
+    <>
+      <Board cells={cells} />
+      {gameOver === GameOverStatus.Success && <GameOverSuccess />}
+      {gameOver === GameOverStatus.Fail && <GameOverFailed />}
+    </>
+  );
 };
 
 export default Game;
