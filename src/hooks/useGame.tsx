@@ -14,10 +14,13 @@ const useGame = () => {
   const {
     isMoved,
     cells,
+    history,
     getEmptyCellsIndex,
     setCells,
     setIsMoved,
     addTwoRandomCells,
+    saveCellsHistory,
+    undo,
   } = useGameBoard();
   const { rotateMapCounterClockwise } = useRotateCells();
   const { moveLeft } = useMoveLeft();
@@ -82,6 +85,7 @@ const useGame = () => {
         setGameOver(GameOverStatus.Fail);
       }
       setCells(newCells);
+      saveCellsHistory(newCells);
     }
 
     setIsMoved(false);
@@ -92,17 +96,20 @@ const useGame = () => {
     is128Exist,
     setCells,
     setIsMoved,
+    saveCellsHistory,
   ]);
 
   return {
     isMoved,
     cells,
     gameOver,
+    history,
     addTwoRandomCells,
     checkNextTurn,
     moveCells,
     checkCanMove,
     is128Exist,
+    undo,
   };
 };
 

@@ -1,3 +1,5 @@
+import type React from 'react';
+
 import { HighScoreBar, ScoreBar } from './game/Score.tsx';
 import { StyledButton } from './styles/Button.styled.tsx';
 import {
@@ -8,7 +10,13 @@ import {
 } from './styles/Container.styled.tsx';
 import { StyledFont } from './styles/Font.styled.tsx';
 
-const Header = () => {
+interface HeaderProps {
+  undo: () => void;
+}
+const Header: React.FC<HeaderProps> = ({ undo }) => {
+  const onClickUndo = () => {
+    undo();
+  };
   const onClickNewGame = () => {
     window.location.reload();
   };
@@ -40,7 +48,18 @@ const Header = () => {
           <ScoreBar />
           <HighScoreBar />
         </StyledContainerH>
-        <StyledButton onClick={onClickNewGame}>New Game</StyledButton>
+        <StyledFullContainer>
+          <StyledButton
+            onClick={onClickNewGame}
+            background="primary"
+            color="white"
+          >
+            New Game
+          </StyledButton>
+          <StyledButton onClick={onClickUndo} background="secondary">
+            Undo
+          </StyledButton>
+        </StyledFullContainer>
       </StyledFullContainer>
     </StyledFullContainerH>
   );

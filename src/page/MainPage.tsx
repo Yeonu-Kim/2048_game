@@ -2,14 +2,12 @@ import styled from 'styled-components';
 
 import Footer from '../components/Footer.tsx';
 import Game from '../components/game/Game.tsx';
-import Header from '../components/Header.tsx';
 import { StyledContainer } from '../components/styles/Container.styled.tsx';
 
 const MainPage = () => {
   return (
     <StyledBackground>
       <StyledMainContainer gap={5}>
-        <Header />
         <Game />
         <Footer />
       </StyledMainContainer>
