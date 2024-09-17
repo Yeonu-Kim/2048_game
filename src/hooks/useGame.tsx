@@ -25,6 +25,7 @@ const useGame = () => {
     undo,
     getScore,
     updateHighScore,
+    initGameBoard,
   } = useGameBoard();
   const { rotateMapCounterClockwise } = useRotateCells();
   const { moveLeft } = useMoveLeft();
@@ -92,6 +93,10 @@ const useGame = () => {
         setGameOver(GameOverStatus.Fail);
       }
 
+      // 로컬 스토리지에 데이터 저장
+      window.localStorage.setItem('cells', JSON.stringify(newCells));
+      window.localStorage.setItem('history', JSON.stringify(history));
+
       setCells(newCells);
       saveCellsHistory(newCells);
     }
@@ -99,6 +104,7 @@ const useGame = () => {
     setIsMoved(false);
   }, [
     cells,
+    history,
     getEmptyCellsIndex,
     checkCanMove,
     is128Exist,
@@ -122,8 +128,7 @@ const useGame = () => {
     checkCanMove,
     is128Exist,
     undo,
-    getScore,
-    updateHighScore,
+    initGameBoard,
   };
 };
 
