@@ -8,6 +8,8 @@ const useGameBoard = () => {
   );
   const [isMoved, setIsMoved] = useState<boolean>(false);
   const [history, setHistory] = useState<(number | null)[][][]>([]);
+  const [score, setScore] = useState<number>(0);
+  const [highScore, setHighScore] = useState<number>(0);
 
   const getEmptyCellsIndex = useCallback((): [number, number][] => {
     const emptyCells: [number, number][] = [];
@@ -51,7 +53,6 @@ const useGameBoard = () => {
 
   const undo = useCallback(() => {
     setHistory((prevHistory: (number | null)[][][]) => {
-      console.error(prevHistory);
       if (prevHistory.length > 1) {
         const newHistory = prevHistory.slice(0, -1);
         const previousCells = newHistory[newHistory.length - 1] ?? null;
@@ -67,16 +68,39 @@ const useGameBoard = () => {
     });
   }, []);
 
+  const getScore = useCallback((newCells: (number | null)[][]) => {
+    const newScore = newCells.reduce(
+      (accRow, row) =>
+        accRow +
+        row.reduce<number>((accCell, cell) => accCell + (cell ?? 0), 0),
+      0,
+    );
+
+    setScore(newScore);
+
+    return newScore;
+  }, []);
+
+  const updateHighScore = useCallback((newScore: number) => {
+    setHighScore((prevHighScore) => {
+      return newScore > prevHighScore ? newScore : prevHighScore;
+    });
+  }, []);
+
   return {
     cells,
     isMoved,
     history,
+    score,
+    highScore,
     getEmptyCellsIndex,
     setCells,
     setIsMoved,
     addTwoRandomCells,
     saveCellsHistory,
     undo,
+    getScore,
+    updateHighScore,
   };
 };
 

@@ -15,12 +15,16 @@ const useGame = () => {
     isMoved,
     cells,
     history,
+    score,
+    highScore,
     getEmptyCellsIndex,
     setCells,
     setIsMoved,
     addTwoRandomCells,
     saveCellsHistory,
     undo,
+    getScore,
+    updateHighScore,
   } = useGameBoard();
   const { rotateMapCounterClockwise } = useRotateCells();
   const { moveLeft } = useMoveLeft();
@@ -76,6 +80,9 @@ const useGame = () => {
       if (newCells[rowIndex] !== undefined) {
         newCells[rowIndex][colIndex] = 2;
       }
+      // 점수 연산
+      const newScore = getScore(newCells);
+      updateHighScore(newScore);
 
       // 다음 턴 진행 가능한지 확인
       if (is128Exist(newCells)) {
@@ -97,6 +104,8 @@ const useGame = () => {
     setCells,
     setIsMoved,
     saveCellsHistory,
+    getScore,
+    updateHighScore,
   ]);
 
   return {
@@ -104,12 +113,16 @@ const useGame = () => {
     cells,
     gameOver,
     history,
+    score,
+    highScore,
     addTwoRandomCells,
     checkNextTurn,
     moveCells,
     checkCanMove,
     is128Exist,
     undo,
+    getScore,
+    updateHighScore,
   };
 };
 

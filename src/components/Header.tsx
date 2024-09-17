@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import { HighScoreBar, ScoreBar } from './game/Score.tsx';
+import { ScoreBar } from './game/Score.tsx';
 import { StyledButton } from './styles/Button.styled.tsx';
 import {
   StyledContainer,
@@ -12,8 +12,10 @@ import { StyledFont } from './styles/Font.styled.tsx';
 
 interface HeaderProps {
   undo: () => void;
+  score: number;
+  highScore: number;
 }
-const Header: React.FC<HeaderProps> = ({ undo }) => {
+const Header: React.FC<HeaderProps> = ({ undo, score, highScore }) => {
   const onClickUndo = () => {
     undo();
   };
@@ -45,8 +47,8 @@ const Header: React.FC<HeaderProps> = ({ undo }) => {
       </StyledContainer>
       <StyledFullContainer width={30}>
         <StyledContainerH>
-          <ScoreBar />
-          <HighScoreBar />
+          <ScoreBar score={score} />
+          <ScoreBar score={highScore} isHighScore />
         </StyledContainerH>
         <StyledFullContainer>
           <StyledButton

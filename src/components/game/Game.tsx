@@ -17,7 +17,8 @@ const Game = () => {
     isMoved,
     cells,
     gameOver,
-    history,
+    score,
+    highScore,
     addTwoRandomCells,
     checkNextTurn,
     moveCells,
@@ -70,10 +71,9 @@ const Game = () => {
 
   const handleIsMoved = useCallback(() => {
     if (isMoved) {
-      console.error(history);
       checkNextTurn();
     }
-  }, [isMoved, checkNextTurn, history]);
+  }, [isMoved, checkNextTurn]);
 
   useEffect(addTwoRandomCells, [addTwoRandomCells]);
 
@@ -89,7 +89,7 @@ const Game = () => {
 
   return (
     <>
-      <Header undo={undo} />
+      <Header undo={undo} score={score} highScore={highScore} />
       <Board cells={cells} gameOver={gameOver} />
     </>
   );
