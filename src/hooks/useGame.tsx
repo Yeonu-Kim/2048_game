@@ -91,6 +91,7 @@ const useGame = () => {
       if (!checkCanMove(newCells)) {
         setGameOver(GameOverStatus.Fail);
       }
+
       setCells(newCells);
       saveCellsHistory(newCells);
     }

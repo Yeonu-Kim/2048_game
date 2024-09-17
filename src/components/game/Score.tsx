@@ -8,11 +8,14 @@ interface ScoreBarProps {
   score: number;
   isHighScore?: boolean;
 }
-export const ScoreBar: React.FC<ScoreBarProps> = ({ score, isHighScore = false }) => {
+export const ScoreBar: React.FC<ScoreBarProps> = ({
+  score,
+  isHighScore = false,
+}) => {
   return (
     <StyledScoreContainer alignH="center" background="primary" gap={0}>
       <StyledFont size="S" color="white" bold>
-        {isHighScore ? "HIGHSCORE" : "SCORE"}
+        {isHighScore ? 'HIGHSCORE' : 'SCORE'}
       </StyledFont>
       <StyledFont size="L" color="white" bold>
         {score}
