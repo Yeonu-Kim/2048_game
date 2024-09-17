@@ -12,15 +12,21 @@ import { StyledFont } from './styles/Font.styled.tsx';
 
 interface HeaderProps {
   undo: () => void;
+  initGameBoard: () => void;
   score: number;
   highScore: number;
 }
-const Header: React.FC<HeaderProps> = ({ undo, score, highScore }) => {
+const Header: React.FC<HeaderProps> = ({
+  undo,
+  initGameBoard,
+  score,
+  highScore,
+}) => {
   const onClickUndo = () => {
     undo();
   };
   const onClickNewGame = () => {
-    window.location.reload();
+    initGameBoard();
   };
   return (
     <StyledFullContainerH>

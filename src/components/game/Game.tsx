@@ -23,6 +23,7 @@ const Game = () => {
     checkNextTurn,
     moveCells,
     undo,
+    initGameBoard,
   } = useGame();
 
   const moveCellsByDirection = useCallback(
@@ -89,7 +90,12 @@ const Game = () => {
 
   return (
     <>
-      <Header undo={undo} score={score} highScore={highScore} />
+      <Header
+        undo={undo}
+        initGameBoard={initGameBoard}
+        score={score}
+        highScore={highScore}
+      />
       <Board cells={cells} gameOver={gameOver} />
     </>
   );
