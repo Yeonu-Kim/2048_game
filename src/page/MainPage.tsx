@@ -25,7 +25,7 @@ const StyledBackground = styled.div`
   background: ${({ theme }) => theme.color.background};
   display: flex;
   justify-content: center;
-  width: 100dvw;
+  width: 100%;
 `;
 
 export default MainPage;

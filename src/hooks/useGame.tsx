@@ -115,6 +115,11 @@ const useGame = () => {
     updateHighScore,
   ]);
 
+  const onClickNewGame = () => {
+    initGameBoard();
+    setGameOver(GameOverStatus.None);
+  };
+
   return {
     isMoved,
     cells,
@@ -128,7 +133,7 @@ const useGame = () => {
     checkCanMove,
     is128Exist,
     undo,
-    initGameBoard,
+    onClickNewGame,
   };
 };
 

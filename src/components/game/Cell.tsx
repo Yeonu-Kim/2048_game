@@ -1,82 +1,21 @@
-import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+
+import usePreviousProps from '../../hooks/usePreviousProps';
+
+const mergeAnimationDuration = 200;
 
 interface CellProps {
-  position: number[];
+  position: [number, number];
   value: number | null;
 }
 
 interface StyledCellProps {
-  left: number;
   top: number;
+  left: number;
+  value: number | null;
+  scale: number;
 }
-
-const Cell: React.FC<CellProps> = ({ position, value }) => {
-  const top = position[0] ?? 0;
-  const left = position[1] ?? 0;
-
-  const getCell = () => {
-    switch (value) {
-      case 2:
-        return (
-          <Cell2 left={left} top={top}>
-            {value}
-          </Cell2>
-        );
-      case 4:
-        return (
-          <Cell4 left={left} top={top}>
-            {value}
-          </Cell4>
-        );
-      case 8:
-        return (
-          <Cell8 left={left} top={top}>
-            {value}
-          </Cell8>
-        );
-      case 16:
-        return (
-          <Cell16 left={left} top={top}>
-            {value}
-          </Cell16>
-        );
-      case 32:
-        return (
-          <Cell32 left={left} top={top}>
-            {value}
-          </Cell32>
-        );
-      case 64:
-        return (
-          <Cell64 left={left} top={top}>
-            {value}
-          </Cell64>
-        );
-      case 128:
-        return (
-          <Cell128 left={left} top={top}>
-            {value}
-          </Cell128>
-        );
-      default:
-        return null;
-    }
-  };
-
-  return <>{getCell()}</>;
-};
-
-const show = keyframes`
-  0% {
-    opacity: 0.5;
-    transform: scale(0);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-`;
 
 const StyledCell = styled.div<StyledCellProps>`
   display: flex;
@@ -91,37 +30,76 @@ const StyledCell = styled.div<StyledCellProps>`
   border-radius: 10px;
   font-size: 3.2rem;
   font-weight: bold;
-  color: ${({ theme }) => theme.color.secondaryDark};
-  transition-property: left, top, transform;
-  transition-duration: 200ms, 200ms, 100ms;
-  animation: ${show} 200ms ease-in-out;
+  background: ${({ value }) => getCellBackground(value)};
+  color: ${({ value }) => getCellTextColor(value)};
+  transition:
+    top 200ms ease,
+    left 200ms ease,
+    transform 100ms ease;
+  transform: scale(${({ scale }) => scale});
+  z-index: ${({ value }) => value};
 `;
 
-const Cell2 = styled(StyledCell)`
-  background: #faf8ef;
-`;
+const getCellBackground = (value: number | null) => {
+  switch (value) {
+    case 2:
+      return '#eee4da';
+    case 4:
+      return '#ede0c8';
+    case 8:
+      return '#f2b179';
+    case 16:
+      return '#f59563';
+    case 32:
+      return '#f67c5f';
+    case 64:
+      return '#f65e3b';
+    case 128:
+      return '#edcf72';
+    case 256:
+      return '#edcc61';
+    case 512:
+      return '#edc850';
+    case 1024:
+      return '#edc53f';
+    case 2048:
+      return '#edc22e';
+    default:
+      return 'transparent';
+  }
+};
 
-const Cell4 = styled(StyledCell)`
-  background: #ede0c8;
-`;
+const getCellTextColor = (value: number | null) => {
+  if (value !== null && value <= 4) return '#776e65';
+  return '#f9f6f2';
+};
 
-const Cell8 = styled(StyledCell)`
-  background: #f2b179;
-`;
-const Cell16 = styled(StyledCell)`
-  background: #f59563;
-  color: ${({ theme }) => theme.color.white};
-`;
-const Cell32 = styled(StyledCell)`
-  background: #f67c5f;
-  color: ${({ theme }) => theme.color.white};
-`;
-const Cell64 = styled(StyledCell)`
-  background: #f65e3b;
-  color: ${({ theme }) => theme.color.white};
-`;
-const Cell128 = styled(StyledCell)`
-  background: #edcf72;
-`;
+const Cell: React.FC<CellProps> = ({ position, value }) => {
+  const [scale, setScale] = useState(1);
+
+  // 새로 생성되거나 머지할 때 살짝 커지도록 애니메이션 넣기
+  const previousValue = usePreviousProps(value);
+  const hasChanged = previousValue !== value;
+
+  useEffect(() => {
+    if (hasChanged) {
+      setScale(1.1);
+      setTimeout(() => {
+        setScale(1);
+      }, mergeAnimationDuration);
+    }
+  }, [hasChanged]);
+
+  return (
+    <StyledCell
+      top={position[0]}
+      left={position[1]}
+      value={value}
+      scale={scale}
+    >
+      {value}
+    </StyledCell>
+  );
+};
 
 export default Cell;
