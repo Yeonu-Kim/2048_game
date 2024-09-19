@@ -1,6 +1,8 @@
-const moveRowLeft = (row: (number | null)[]) => {
+import type { CellsType, CellType } from '../components/types/GameType';
+
+const moveRowLeft = (row: CellType[]) => {
   const reduced = row.reduce(
-    (acc: { lastCell: number | null; result: (number | null)[] }, cell) => {
+    (acc: { lastCell: CellType; result: CellType[] }, cell) => {
       if (cell === null) {
         return acc;
       } else if (acc.lastCell === null) {
@@ -26,7 +28,7 @@ const moveRowLeft = (row: (number | null)[]) => {
   };
 };
 
-const moveLeft = (rotatedCells: (number | null)[][]) => {
+const moveLeft = (rotatedCells: CellsType) => {
   const movedRows = rotatedCells.map(moveRowLeft);
   const result = movedRows.map((movedRow) => movedRow.result);
   const isMoved = movedRows.some((movedRow) => movedRow.isMoved);

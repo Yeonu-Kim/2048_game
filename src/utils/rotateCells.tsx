@@ -1,6 +1,8 @@
+import type { CellsType, RotateDegreeType } from '../components/types/GameType';
+
 const rotateMapCounterClockwise = (
-  prevCells: (number | null)[][],
-  degree: 0 | 90 | 180 | 270,
+  prevCells: CellsType,
+  degree: RotateDegreeType,
 ) => {
   switch (degree) {
     case 0:

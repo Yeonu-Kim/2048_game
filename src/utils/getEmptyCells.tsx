@@ -1,4 +1,6 @@
-const getEmptyCellsIndex = (cells: (number | null)[][]): [number, number][] => {
+import type { CellsType } from '../components/types/GameType';
+
+const getEmptyCellsIndex = (cells: CellsType): [number, number][] => {
   const emptyCells: [number, number][] = [];
   cells.forEach((row, rowIndex) => {
     row.forEach((value, colIndex) => {

@@ -1,8 +1,7 @@
+import type { CellsType } from '../components/types/GameType';
 import getEmptyCellsIndex from './getEmptyCells';
 
-export const addTwoRandomCells = (
-  cells: (number | null)[][],
-): (number | null)[][] => {
+export const addTwoRandomCells = (cells: CellsType): CellsType => {
   const emptyCells = getEmptyCellsIndex(cells);
 
   const randomIndices = emptyCells.sort(() => Math.random() - 0.5).slice(0, 2);
@@ -18,9 +17,7 @@ export const addTwoRandomCells = (
   return newCells;
 };
 
-export const addOneRandomCell = (
-  cells: (number | null)[][],
-): (number | null)[][] => {
+export const addOneRandomCell = (cells: CellsType): CellsType => {
   const emptyCells = getEmptyCellsIndex(cells);
 
   const randomIndex = emptyCells.sort(() => Math.random() - 0.5).slice(0, 1);

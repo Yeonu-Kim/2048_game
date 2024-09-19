@@ -1,13 +1,18 @@
+import type {
+  DirectionType,
+  RotateDegreeType,
+} from '../components/types/GameType';
+
 interface DirectionDegreeProps {
-  up: 0 | 90 | 180 | 270;
-  right: 0 | 90 | 180 | 270;
-  down: 0 | 90 | 180 | 270;
-  left: 0 | 90 | 180 | 270;
+  up: RotateDegreeType;
+  right: RotateDegreeType;
+  down: RotateDegreeType;
+  left: RotateDegreeType;
 }
 
 const moveCellsByDirection = (
-  direction: 'up' | 'down' | 'left' | 'right',
-): [0 | 90 | 180 | 270, 0 | 90 | 180 | 270] => {
+  direction: DirectionType,
+): [RotateDegreeType, RotateDegreeType] => {
   const rotateDegree: DirectionDegreeProps = {
     up: 90,
     right: 180,

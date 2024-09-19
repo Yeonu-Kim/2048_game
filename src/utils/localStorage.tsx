@@ -1,8 +1,9 @@
+import type { CellsType, HistoryType } from '../components/types/GameType';
 import { GameOverStatus } from '../components/types/GameType';
 
 type bodyProps = {
-  cells?: (number | null)[][];
-  history?: (number | null)[][][];
+  cells?: CellsType;
+  history?: HistoryType;
   score?: number;
   highScore?: number;
   gameOver?: GameOverStatus;
@@ -37,7 +38,7 @@ export const getLocalData = (): bodyProps => {
 
   if (storedCells !== null) {
     try {
-      data['cells'] = JSON.parse(storedCells) as (number | null)[][];
+      data['cells'] = JSON.parse(storedCells) as CellsType;
     } catch {
       // 잘못 저장된 item 삭제
       window.localStorage.removeItem('cells');
@@ -46,7 +47,7 @@ export const getLocalData = (): bodyProps => {
 
   if (storedHistory !== null) {
     try {
-      data['history'] = JSON.parse(storedHistory) as (number | null)[][][];
+      data['history'] = JSON.parse(storedHistory) as HistoryType;
     } catch {
       // 잘못 저장된 item 삭제
       window.localStorage.removeItem('history');

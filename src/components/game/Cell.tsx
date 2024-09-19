@@ -1,9 +1,11 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 
+import type { CellType } from '../types/GameType';
+
 interface CellProps {
   position: number[];
-  value: number | null;
+  value: CellType;
 }
 
 interface StyledCellProps {

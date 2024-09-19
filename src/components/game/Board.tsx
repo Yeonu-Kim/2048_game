@@ -1,14 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import type { CellsType } from '../types/GameType.tsx';
 import { GameOverStatus } from '../types/GameType.tsx';
 import Cell from './Cell';
 import GameOverModal from './GameOver.tsx';
-interface BoardProps {
-  cells: (number | null)[][];
+
+type BoardProps = {
+  cells: CellsType;
   gameOver: GameOverStatus;
   checkInit: () => void;
-}
+};
 
 const Board: React.FC<BoardProps> = ({ cells, gameOver, checkInit }) => {
   const totalCellsCount = 16;

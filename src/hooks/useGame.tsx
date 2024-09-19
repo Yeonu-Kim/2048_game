@@ -1,5 +1,10 @@
 import { useCallback, useState } from 'react';
 
+import type {
+  CellsType,
+  DirectionType,
+  HistoryType,
+} from '../components/types/GameType';
 import { GameOverStatus } from '../components/types/GameType';
 import { addOneRandomCell, addTwoRandomCells } from '../utils/addRandomCell';
 import { checkCanMove, is128Exist } from '../utils/checkGameOver';
@@ -14,25 +19,25 @@ import moveCellsByDirection from '../utils/moveCellsByDirection';
 import undo from '../utils/undo';
 
 const useGame = () => {
-  const [cells, setCells] = useState<(number | null)[][]>(
+  const [cells, setCells] = useState<CellsType>(
     Array<null>(4)
       .fill(null)
       .map(() => Array<null>(4).fill(null)),
   );
-  const [history, setHistory] = useState<(number | null)[][][]>([]);
+  const [history, setHistory] = useState<HistoryType>([]);
   const [score, setScore] = useState<number>(0);
   const [highScore, setHighScore] = useState<number>(0);
   const [gameOver, setGameOver] = useState<GameOverStatus>(GameOverStatus.None);
 
-  const saveCellsHistory = useCallback((newCells: (number | null)[][]) => {
-    setHistory((prevHistory: (number | null)[][][]) => [
+  const saveCellsHistory = useCallback((newCells: CellsType) => {
+    setHistory((prevHistory: HistoryType) => [
       ...prevHistory,
       structuredClone(newCells),
     ]);
   }, []);
 
   const checkTurn = useCallback(
-    (direction: 'up' | 'left' | 'right' | 'down') => {
+    (direction: DirectionType) => {
       // 셀 이동
       const [rotateDegree, revertDegree] = moveCellsByDirection(direction);
       const moveResult = moveCells(cells, rotateDegree, revertDegree);
