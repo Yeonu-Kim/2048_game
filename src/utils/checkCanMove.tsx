@@ -11,5 +11,4 @@ const checkCanMove = (newCells: (number | null)[][]) => {
   });
 };
 
-
 export default checkCanMove;
