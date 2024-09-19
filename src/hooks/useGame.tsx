@@ -1,134 +1,167 @@
 import { useCallback, useState } from 'react';
 
-import useGameBoard from './useGameBoard';
-import useMoveLeft from './useMoveLeft';
-import useRotateCells from './useRotateCells';
-
-export enum GameOverStatus {
-  Success = 'success',
-  Fail = 'fail',
-  None = 'none',
-}
+import { GameOverStatus } from '../components/types/GameType';
+import { addOneRandomCell, addTwoRandomCells } from '../utils/addRandomCell';
+import { checkCanMove, is128Exist } from '../utils/checkGameOver';
+import { getHighScore, getScore } from '../utils/getScore';
+import {
+  getLocalData,
+  resetLocalStorage,
+  saveLocalStorage,
+} from '../utils/localStorage';
+import moveCells from '../utils/moveCells';
+import moveCellsByDirection from '../utils/moveCellsByDirection';
+import undo from '../utils/undo';
 
 const useGame = () => {
-  const {
-    isMoved,
-    cells,
-    history,
-    score,
-    highScore,
-    getEmptyCellsIndex,
-    setCells,
-    setIsMoved,
-    addTwoRandomCells,
-    saveCellsHistory,
-    undo,
-    getScore,
-    updateHighScore,
-    initGameBoard,
-  } = useGameBoard();
-  const { rotateMapCounterClockwise } = useRotateCells();
-  const { moveLeft } = useMoveLeft();
-
+  const [cells, setCells] = useState<(number | null)[][]>(
+    Array<null>(4)
+      .fill(null)
+      .map(() => Array<null>(4).fill(null)),
+  );
+  const [history, setHistory] = useState<(number | null)[][][]>([]);
+  const [score, setScore] = useState<number>(0);
+  const [highScore, setHighScore] = useState<number>(0);
   const [gameOver, setGameOver] = useState<GameOverStatus>(GameOverStatus.None);
 
-  const moveCells = useCallback(
-    (
-      rotateDirection: 0 | 90 | 180 | 270,
-      revertDirection: 0 | 90 | 180 | 270,
-    ) => {
-      const rotatedCells = rotateMapCounterClockwise(cells, rotateDirection);
-      const moveResult = moveLeft(rotatedCells);
-      setCells(rotateMapCounterClockwise(moveResult.result, revertDirection));
-      setIsMoved(moveResult.isMoved);
-    },
-    [cells, moveLeft, rotateMapCounterClockwise, setCells, setIsMoved],
-  );
-
-  const checkCanMove = useCallback(
-    (newCells: (number | null)[][]) => {
-      const rotateDirections: (0 | 90 | 180 | 270)[] = [0, 90, 180, 270];
-      return rotateDirections.some((rotateDirection) => {
-        const rotatedCells = rotateMapCounterClockwise(
-          newCells,
-          rotateDirection,
-        );
-        const moveResult = moveLeft(rotatedCells);
-
-        return moveResult.isMoved;
-      });
-    },
-    [moveLeft, rotateMapCounterClockwise],
-  );
-
-  const is128Exist = useCallback((newCells: (number | null)[][]) => {
-    return newCells.some((row) => row.includes(128));
+  const saveCellsHistory = useCallback((newCells: (number | null)[][]) => {
+    setHistory((prevHistory: (number | null)[][][]) => [
+      ...prevHistory,
+      structuredClone(newCells),
+    ]);
   }, []);
 
-  const checkNextTurn = useCallback(() => {
-    const emptyCells = getEmptyCellsIndex();
+  const checkTurn = useCallback(
+    (direction: 'up' | 'left' | 'right' | 'down') => {
+      // 셀 이동
+      const [rotateDegree, revertDegree] = moveCellsByDirection(direction);
+      const moveResult = moveCells(cells, rotateDegree, revertDegree);
 
-    if (emptyCells.length === 0) return;
+      const movedCells = moveResult.result;
+      const newIsMoved = moveResult.isMoved;
 
-    // 새로운 셀 생성
-    const randomIndex = Math.floor(Math.random() * emptyCells.length);
-    // 이 조건 깔끔하게 처리할 수 있는 방법 확인
-    if (emptyCells[randomIndex] !== undefined) {
-      const [rowIndex, colIndex] = emptyCells[randomIndex];
+      if (newIsMoved) {
+        const newCells = addOneRandomCell(movedCells);
 
-      const newCells = cells.map((row) => [...row]);
+        // 점수 연산
+        const newScore = getScore(newCells);
+        const newHighScore = getHighScore(newScore, highScore);
 
-      if (newCells[rowIndex] !== undefined) {
-        newCells[rowIndex][colIndex] = 2;
+        // 다음 턴 진행 가능한지 확인
+        if (is128Exist(newCells)) {
+          setGameOver(GameOverStatus.Success);
+          saveLocalStorage({ gameOver: GameOverStatus.Success });
+        } else if (!checkCanMove(newCells)) {
+          setGameOver(GameOverStatus.Fail);
+          saveLocalStorage({ gameOver: GameOverStatus.Fail });
+        }
+
+        // 데이터 저장
+        saveLocalStorage({
+          cells: newCells,
+          history: [...history, structuredClone(newCells)],
+          score: newScore,
+          highScore: newHighScore,
+        });
+
+        setCells(newCells);
+        saveCellsHistory(newCells);
+        setScore(newScore);
+        setHighScore(newHighScore);
       }
-      // 점수 연산
-      const newScore = getScore(newCells);
-      updateHighScore(newScore);
+    },
+    [cells, history, highScore, saveCellsHistory],
+  );
 
-      // 다음 턴 진행 가능한지 확인
-      if (is128Exist(newCells)) {
-        setGameOver(GameOverStatus.Success);
-      }
-      if (!checkCanMove(newCells)) {
-        setGameOver(GameOverStatus.Fail);
-      }
+  const checkUndo = () => {
+    const undoResult = undo(history);
 
-      // 로컬 스토리지에 데이터 저장
-      window.localStorage.setItem('cells', JSON.stringify(newCells));
-      window.localStorage.setItem('history', JSON.stringify(history));
+    if (undoResult.currentCell !== undefined) {
+      setCells(undoResult.currentCell);
+      // 점수 변경
+      const newScore = getScore(undoResult.currentCell);
+      setScore(newScore);
 
-      setCells(newCells);
-      saveCellsHistory(newCells);
+      // 변경 내용 로컬스토리지에 반영
+      saveLocalStorage({
+        cells: undoResult.currentCell,
+        history: undoResult.history,
+      });
+    }
+    setHistory(undoResult.history);
+  };
+
+  const checkReload = useCallback(() => {
+    const data = getLocalData();
+
+    const emptyCells = Array<null>(4)
+      .fill(null)
+      .map(() => Array<null>(4).fill(null));
+    const initCells = addTwoRandomCells(emptyCells);
+
+    // 로컬스토리지에 데이터가 있으면 해당 데이터로 불러오기
+    if (data.cells !== undefined) {
+      setCells(data.cells);
+    } else {
+      data.cells = initCells;
+      setCells(initCells);
+    }
+    if (data.history !== undefined) {
+      setHistory(data.history);
+    } else {
+      data.history = [];
+      setHistory([]);
+    }
+    if (data.score !== undefined) {
+      setScore(data.score);
+    } else {
+      data.score = 4;
+      setScore(4);
+    }
+    if (data.highScore !== undefined) {
+      setHighScore(data.highScore);
+    } else {
+      data.highScore = 4;
+      setHighScore(4);
+    }
+    if (data.gameOver !== undefined) {
+      setGameOver(data.gameOver);
+    } else {
+      data.gameOver = GameOverStatus.None;
+      setGameOver(GameOverStatus.None);
     }
 
-    setIsMoved(false);
-  }, [
-    cells,
-    history,
-    getEmptyCellsIndex,
-    checkCanMove,
-    is128Exist,
-    setCells,
-    setIsMoved,
-    saveCellsHistory,
-    getScore,
-    updateHighScore,
-  ]);
+    saveLocalStorage(data);
+  }, []);
+
+  const checkInit = () => {
+    resetLocalStorage();
+
+    const emptyCells = Array<null>(4)
+      .fill(null)
+      .map(() => Array<null>(4).fill(null));
+    const initCells = addTwoRandomCells(emptyCells);
+
+    setCells(initCells);
+    setScore(4);
+    setHistory([initCells]);
+    setGameOver(GameOverStatus.None);
+
+    // highScore는 다시 로컬스토리지에 저장
+    saveLocalStorage({
+      highScore: highScore,
+    });
+  };
 
   return {
-    isMoved,
     cells,
-    gameOver,
-    history,
     score,
     highScore,
-    addTwoRandomCells,
-    checkNextTurn,
-    moveCells,
-    checkCanMove,
-    is128Exist,
-    undo,
-    initGameBoard,
+    gameOver,
+    checkTurn,
+    checkUndo,
+    checkReload,
+    checkInit,
   };
 };
 

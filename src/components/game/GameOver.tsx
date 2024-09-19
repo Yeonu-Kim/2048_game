@@ -7,16 +7,16 @@ import { StyledFont } from '../styles/Font.styled';
 
 interface GameOverModalProps {
   isWon?: boolean;
+  checkInit: () => void;
 }
-const GameOverModal: React.FC<GameOverModalProps> = ({ isWon = false }) => {
-  const onClickNewGame = () => {
-    window.location.reload();
-  };
-
+const GameOverModal: React.FC<GameOverModalProps> = ({
+  isWon = false,
+  checkInit,
+}) => {
   return (
     <StyledModal align="center" alignH="center" gap={3}>
       <StyledFont size="L">{isWon ? '성공했어요!' : '게임 오버 😭'}</StyledFont>
-      <StyledButton onClick={onClickNewGame}>다시하기</StyledButton>
+      <StyledButton onClick={checkInit}>다시하기</StyledButton>
     </StyledModal>
   );
 };
