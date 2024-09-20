@@ -1,15 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { GameOverStatus } from '../../hooks/useGame.tsx';
+import type { CellsType } from '../types/GameType.tsx';
+import { GameOverStatus } from '../types/GameType.tsx';
 import Cell from './Cell';
 import GameOverModal from './GameOver.tsx';
-interface BoardProps {
-  cells: (number | null)[][];
-  gameOver: GameOverStatus;
-}
 
-const Board: React.FC<BoardProps> = ({ cells, gameOver }) => {
+type BoardProps = {
+  cells: CellsType;
+  gameOver: GameOverStatus;
+  checkInit: () => void;
+};
+
+const Board: React.FC<BoardProps> = ({ cells, gameOver, checkInit }) => {
   const totalCellsCount = 16;
 
   const renderBackgroundCell = () => {
@@ -34,8 +37,12 @@ const Board: React.FC<BoardProps> = ({ cells, gameOver }) => {
     <GameBoardLayout id="gameboard">
       {renderBackgroundCell()}
       {renderCells()}
-      {gameOver === GameOverStatus.Success && <GameOverModal isWon={true} />}
-      {gameOver === GameOverStatus.Fail && <GameOverModal />}
+      {gameOver === GameOverStatus.Success && (
+        <GameOverModal checkInit={checkInit} isWon />
+      )}
+      {gameOver === GameOverStatus.Fail && (
+        <GameOverModal checkInit={checkInit} />
+      )}
     </GameBoardLayout>
   );
 };

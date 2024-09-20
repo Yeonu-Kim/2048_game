@@ -1,102 +1,72 @@
 import { useCallback, useEffect } from 'react';
 
-import { GameOverStatus } from '../../hooks/useGame.tsx';
 import useGame from '../../hooks/useGame.tsx';
 import Header from '../Header.tsx';
+import { GameOverStatus } from '../types/GameType.tsx';
 import Board from './Board.tsx';
-
-interface DirectionDegreeProps {
-  up: 0 | 90 | 180 | 270;
-  right: 0 | 90 | 180 | 270;
-  down: 0 | 90 | 180 | 270;
-  left: 0 | 90 | 180 | 270;
-}
 
 const Game = () => {
   const {
-    isMoved,
     cells,
-    gameOver,
     score,
     highScore,
-    addTwoRandomCells,
-    checkNextTurn,
-    moveCells,
-    undo,
-    initGameBoard,
+    gameOver,
+    checkTurn,
+    checkReload,
+    checkUndo,
+    checkInit,
   } = useGame();
 
-  const moveCellsByDirection = useCallback(
-    (direction: 'up' | 'down' | 'left' | 'right') => {
-      const rotateDegree: DirectionDegreeProps = {
-        up: 90,
-        right: 180,
-        down: 270,
-        left: 0,
-      };
-
-      const revertDegree: DirectionDegreeProps = {
-        up: 270,
-        right: 180,
-        down: 90,
-        left: 0,
-      };
-
-      moveCells(rotateDegree[direction], revertDegree[direction]);
-    },
-    [moveCells],
-  );
-
-  const handleKeyDown = useCallback(
+  const getKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      event.preventDefault();
-      if (gameOver === GameOverStatus.None) {
+      if (gameOver == GameOverStatus.None) {
         switch (event.code) {
           case 'ArrowUp':
-            moveCellsByDirection('up');
+            event.preventDefault();
+            checkTurn('up');
             break;
+
           case 'ArrowDown':
-            moveCellsByDirection('down');
+            event.preventDefault();
+            checkTurn('down');
             break;
+
           case 'ArrowLeft':
-            moveCellsByDirection('left');
+            event.preventDefault();
+            checkTurn('left');
             break;
+
           case 'ArrowRight':
-            moveCellsByDirection('right');
+            event.preventDefault();
+            checkTurn('right');
             break;
         }
       }
     },
-    [moveCellsByDirection, gameOver],
+    [gameOver, checkTurn],
   );
 
-  const handleIsMoved = useCallback(() => {
-    if (isMoved) {
-      checkNextTurn();
-    }
-  }, [isMoved, checkNextTurn]);
+  // 컴포넌트 렌더링 시 실행
+  useEffect(checkReload, [checkReload]);
 
-  useEffect(addTwoRandomCells, [addTwoRandomCells]);
-
-  useEffect(handleIsMoved, [handleIsMoved]);
-
+  // 키 누르면 게임 실행
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keydown', getKeyDown);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keydown', getKeyDown);
     };
-  }, [isMoved, handleKeyDown]);
+  }, [getKeyDown]);
 
   return (
     <>
       <Header
-        undo={undo}
-        initGameBoard={initGameBoard}
         score={score}
         highScore={highScore}
+        checkUndo={checkUndo}
+        checkInit={checkInit}
       />
-      <Board cells={cells} gameOver={gameOver} />
+      <Board cells={cells} gameOver={gameOver} checkInit={checkInit} />
     </>
   );
 };

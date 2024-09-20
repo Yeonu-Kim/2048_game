@@ -11,23 +11,17 @@ import {
 import { StyledFont } from './styles/Font.styled.tsx';
 
 interface HeaderProps {
-  undo: () => void;
-  initGameBoard: () => void;
+  checkUndo: () => void;
+  checkInit: () => void;
   score: number;
   highScore: number;
 }
 const Header: React.FC<HeaderProps> = ({
-  undo,
-  initGameBoard,
   score,
   highScore,
+  checkUndo,
+  checkInit,
 }) => {
-  const onClickUndo = () => {
-    undo();
-  };
-  const onClickNewGame = () => {
-    initGameBoard();
-  };
   return (
     <StyledFullContainerH>
       <StyledContainer width={70} color="secondaryDark">
@@ -57,14 +51,10 @@ const Header: React.FC<HeaderProps> = ({
           <ScoreBar score={highScore} isHighScore />
         </StyledContainerH>
         <StyledFullContainer>
-          <StyledButton
-            onClick={onClickNewGame}
-            background="primary"
-            color="white"
-          >
+          <StyledButton onClick={checkInit} background="primary" color="white">
             New Game
           </StyledButton>
-          <StyledButton onClick={onClickUndo} background="secondary">
+          <StyledButton onClick={checkUndo} background="secondary">
             Undo
           </StyledButton>
         </StyledFullContainer>
