@@ -44,12 +44,13 @@ const useGame = () => {
 
       const movedCells = moveResult.result;
       const newIsMoved = moveResult.isMoved;
+      const addScore = moveResult.addScore;
 
       if (newIsMoved) {
         const newCells = addOneRandomCell(movedCells);
 
         // 점수 연산
-        const newScore = getScore(newCells);
+        const newScore = score + addScore;
         const newHighScore = getHighScore(newScore, highScore);
 
         // 다음 턴 진행 가능한지 확인
@@ -75,7 +76,7 @@ const useGame = () => {
         setHighScore(newHighScore);
       }
     },
-    [cells, history, highScore, saveCellsHistory],
+    [score, cells, history, highScore, saveCellsHistory],
   );
 
   const checkUndo = () => {
@@ -120,14 +121,14 @@ const useGame = () => {
     if (data.score !== undefined) {
       setScore(data.score);
     } else {
-      data.score = 4;
-      setScore(4);
+      data.score = 0;
+      setScore(0);
     }
     if (data.highScore !== undefined) {
       setHighScore(data.highScore);
     } else {
-      data.highScore = 4;
-      setHighScore(4);
+      data.highScore = 0;
+      setHighScore(0);
     }
     if (data.gameOver !== undefined) {
       setGameOver(data.gameOver);
@@ -148,7 +149,7 @@ const useGame = () => {
     const initCells = addTwoRandomCells(emptyCells);
 
     setCells(initCells);
-    setScore(4);
+    setScore(0);
     setHistory([initCells]);
     setGameOver(GameOverStatus.None);
 

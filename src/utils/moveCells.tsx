@@ -12,6 +12,7 @@ const moveCells = (
   return {
     result: rotateMapCounterClockwise(moveResult.result, revertDirection),
     isMoved: moveResult.isMoved,
+    addScore: moveResult.addScore,
   };
 };
 
