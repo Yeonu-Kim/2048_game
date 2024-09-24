@@ -12,7 +12,7 @@ type DirectionDegreeProps = {
   left: RotateDegree;
 };
 
-export const moveCellsByDirection = (
+const moveCellsByDirection = (
   direction: Direction,
 ): [RotateDegree, RotateDegree] => {
   const rotateDegree: DirectionDegreeProps = {
@@ -83,10 +83,7 @@ const moveLeft = (rotatedCells: Cells) => {
   return { result, isMoved, addScore };
 };
 
-export const rotateMapCounterClockwise = (
-  prevCells: Cells,
-  degree: RotateDegree,
-) => {
+const rotateMapCounterClockwise = (prevCells: Cells, degree: RotateDegree) => {
   switch (degree) {
     case 0:
       return prevCells;
