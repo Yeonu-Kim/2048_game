@@ -1,46 +1,42 @@
 import { useCallback, useState } from 'react';
 
-import type {
-  CellsType,
-  DirectionType,
-  HistoryType,
-} from '../components/types/GameType';
-import { GameOverStatus } from '../components/types/GameType';
-import { addOneRandomCell, addTwoRandomCells } from '../utils/addRandomCell';
-import { checkCanMove, is128Exist } from '../utils/checkGameOver';
-import { getHighScore, getScore } from '../utils/getScore';
+import type { Cells, Direction, History } from '../entities/gameType.ts';
+import { GameOverStatus } from '../entities/gameType.ts';
+import { getHighScore, getScore } from '../usecases/scoreUtils.ts';
+import { undo } from '../usecases/undoUtils.ts';
+import {
+  addOneRandomCell,
+  addTwoRandomCells,
+  checkCanMove,
+  getEmptyCellsIndex,
+  is128Exist,
+  moveCells,
+} from '../utils/cellUtils.ts';
 import {
   getLocalData,
   resetLocalStorage,
   saveLocalStorage,
-} from '../utils/localStorage';
-import moveCells from '../utils/moveCells';
-import moveCellsByDirection from '../utils/moveCellsByDirection';
-import undo from '../utils/undo';
+} from '../utils/localStorageUtils.ts';
 
-const useGame = () => {
-  const [cells, setCells] = useState<CellsType>(
+export const useGame = () => {
+  const [cells, setCells] = useState<Cells>(
     Array<null>(4)
       .fill(null)
       .map(() => Array<null>(4).fill(null)),
   );
-  const [history, setHistory] = useState<HistoryType>([]);
-  const [score, setScore] = useState<number>(0);
-  const [highScore, setHighScore] = useState<number>(0);
-  const [gameOver, setGameOver] = useState<GameOverStatus>(GameOverStatus.None);
+  const [history, setHistory] = useState<History>([]);
+  const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(0);
+  const [gameOver, setGameOver] = useState<GameOverStatus>(GameOverStatus.NONE);
 
-  const saveCellsHistory = useCallback((newCells: CellsType) => {
-    setHistory((prevHistory: HistoryType) => [
-      ...prevHistory,
-      structuredClone(newCells),
-    ]);
+  const saveCellsHistory = useCallback((newCells: Cells) => {
+    setHistory((prevHistory) => [...prevHistory, structuredClone(newCells)]);
   }, []);
 
   const checkTurn = useCallback(
-    (direction: DirectionType) => {
+    (direction: Direction) => {
       // 셀 이동
-      const [rotateDegree, revertDegree] = moveCellsByDirection(direction);
-      const moveResult = moveCells(cells, rotateDegree, revertDegree);
+      const moveResult = moveCells(cells, direction);
 
       const movedCells = moveResult.result;
       const newIsMoved = moveResult.isMoved;
@@ -55,20 +51,10 @@ const useGame = () => {
 
         // 다음 턴 진행 가능한지 확인
         if (is128Exist(newCells)) {
-          setGameOver(GameOverStatus.Success);
-          saveLocalStorage({ gameOver: GameOverStatus.Success });
+          setGameOver(GameOverStatus.SUCCESS);
         } else if (!checkCanMove(newCells)) {
-          setGameOver(GameOverStatus.Fail);
-          saveLocalStorage({ gameOver: GameOverStatus.Fail });
+          setGameOver(GameOverStatus.FAIL);
         }
-
-        // 데이터 저장
-        saveLocalStorage({
-          cells: newCells,
-          history: [...history, structuredClone(newCells)],
-          score: newScore,
-          highScore: newHighScore,
-        });
 
         setCells(newCells);
         saveCellsHistory(newCells);
@@ -76,7 +62,7 @@ const useGame = () => {
         setHighScore(newHighScore);
       }
     },
-    [score, cells, history, highScore, saveCellsHistory],
+    [score, cells, highScore, saveCellsHistory],
   );
 
   const checkUndo = () => {
@@ -87,12 +73,6 @@ const useGame = () => {
       // 점수 변경
       const newScore = getScore(undoResult.currentCell);
       setScore(newScore);
-
-      // 변경 내용 로컬스토리지에 반영
-      saveLocalStorage({
-        cells: undoResult.currentCell,
-        history: undoResult.history,
-      });
     }
     setHistory(undoResult.history);
   };
@@ -106,38 +86,19 @@ const useGame = () => {
     const initCells = addTwoRandomCells(emptyCells);
 
     // 로컬스토리지에 데이터가 있으면 해당 데이터로 불러오기
-    if (data.cells !== undefined) {
-      setCells(data.cells);
-    } else {
-      data.cells = initCells;
+    if (
+      data.cells !== undefined &&
+      getEmptyCellsIndex(data.cells).length === 16
+    ) {
       setCells(initCells);
-    }
-    if (data.history !== undefined) {
-      setHistory(data.history);
     } else {
-      data.history = [];
-      setHistory([]);
-    }
-    if (data.score !== undefined) {
-      setScore(data.score);
-    } else {
-      data.score = 0;
-      setScore(0);
-    }
-    if (data.highScore !== undefined) {
-      setHighScore(data.highScore);
-    } else {
-      data.highScore = 0;
-      setHighScore(0);
-    }
-    if (data.gameOver !== undefined) {
-      setGameOver(data.gameOver);
-    } else {
-      data.gameOver = GameOverStatus.None;
-      setGameOver(GameOverStatus.None);
+      setCells(data.cells ?? initCells);
     }
 
-    saveLocalStorage(data);
+    setHistory(data.history ?? []);
+    setScore(data.score ?? 0);
+    setHighScore(data.highScore ?? 0);
+    setGameOver(data.gameOver ?? GameOverStatus.NONE);
   }, []);
 
   const checkInit = () => {
@@ -151,7 +112,7 @@ const useGame = () => {
     setCells(initCells);
     setScore(0);
     setHistory([initCells]);
-    setGameOver(GameOverStatus.None);
+    setGameOver(GameOverStatus.NONE);
 
     // highScore는 다시 로컬스토리지에 저장
     saveLocalStorage({
@@ -163,6 +124,7 @@ const useGame = () => {
     cells,
     score,
     highScore,
+    history,
     gameOver,
     checkTurn,
     checkUndo,
@@ -170,5 +132,3 @@ const useGame = () => {
     checkInit,
   };
 };
-
-export default useGame;

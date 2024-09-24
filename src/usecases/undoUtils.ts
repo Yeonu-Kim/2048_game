@@ -1,11 +1,11 @@
-import type { CellsType, HistoryType } from '../components/types/GameType';
+import type { Cells, History } from '../entities/gameType.ts';
 
-type undoProps = {
-  history: HistoryType;
-  currentCell?: CellsType;
+type UndoProps = {
+  history: History;
+  currentCell?: Cells;
 };
 
-const undo = (prevHistory: HistoryType): undoProps => {
+export const undo = (prevHistory: History): UndoProps => {
   if (prevHistory.length > 1) {
     const newHistory = prevHistory.slice(0, -1);
     const previousCells = newHistory[newHistory.length - 1];
@@ -15,5 +15,3 @@ const undo = (prevHistory: HistoryType): undoProps => {
 
   return { history: prevHistory, currentCell: prevHistory[0] };
 };
-
-export default undo;
