@@ -91,11 +91,12 @@ export const useGame = () => {
       getEmptyCellsIndex(data.cells).length === 16
     ) {
       setCells(initCells);
+      setHistory([initCells]);
     } else {
       setCells(data.cells ?? initCells);
+      setHistory(data.history ?? []);
     }
 
-    setHistory(data.history ?? []);
     setScore(data.score ?? 0);
     setHighScore(data.highScore ?? 0);
     setGameOver(data.gameOver ?? GameOverStatus.NONE);
