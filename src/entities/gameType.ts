@@ -1,6 +1,7 @@
 export type CellType = number | null;
 export type Cells = CellType[][];
-export type History = Cells[];
+export type History = { cells: Cells; score: number };
+export type HistoryList = History[];
 export type Direction = 'up' | 'left' | 'right' | 'down';
 export type RotateDegree = 0 | 90 | 180 | 270;
 export enum GameOverStatus {

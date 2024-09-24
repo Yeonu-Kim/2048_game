@@ -1,9 +1,9 @@
-import type { Cells, History } from '../entities/gameType.ts';
+import type { Cells, HistoryList } from '../entities/gameType.ts';
 import { GameOverStatus, LocalStorageKey } from '../entities/gameType.ts';
 
 type BodyProps = {
   cells?: Cells;
-  history?: History;
+  history?: HistoryList;
   score?: number;
   highScore?: number;
   gameOver?: GameOverStatus;
@@ -55,7 +55,7 @@ export const getLocalData = (): BodyProps => {
 
   if (storedHistory !== null) {
     try {
-      data[LocalStorageKey.HISTORY] = JSON.parse(storedHistory) as History;
+      data[LocalStorageKey.HISTORY] = JSON.parse(storedHistory) as HistoryList;
     } catch {
       // 잘못 저장된 item 삭제
       window.localStorage.removeItem(LocalStorageKey.HISTORY);
