@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
-import Footer from '../components/Footer.tsx';
-import Game from '../components/game/Game.tsx';
+import { Footer } from '../components/Footer.tsx';
+import { Game } from '../components/game/Game.tsx';
 import { StyledContainer } from '../components/styles/Container.styled.tsx';
 
-const MainPage = () => {
+export const MainPage = () => {
   return (
     <StyledBackground>
       <StyledMainContainer gap={5}>
@@ -27,5 +27,3 @@ const StyledBackground = styled.div`
   justify-content: center;
   width: 100dvw;
 `;
-
-export default MainPage;

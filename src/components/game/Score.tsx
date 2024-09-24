@@ -1,17 +1,14 @@
-import type React from 'react';
 import styled from 'styled-components';
 
 import { StyledContainer } from '../styles/Container.styled.tsx';
 import { StyledFont } from '../styles/Font.styled';
 
-interface ScoreBarProps {
+type ScoreBarProps = {
   score: number;
   isHighScore?: boolean;
-}
-export const ScoreBar: React.FC<ScoreBarProps> = ({
-  score,
-  isHighScore = false,
-}) => {
+};
+
+export const ScoreBar = ({ score, isHighScore = false }: ScoreBarProps) => {
   return (
     <StyledScoreContainer alignH="center" background="primary" gap={0}>
       <StyledFont size="S" color="white" bold>

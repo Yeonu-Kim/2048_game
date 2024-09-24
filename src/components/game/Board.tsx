@@ -1,18 +1,17 @@
-import React from 'react';
 import styled from 'styled-components';
 
-import type { CellsType } from '../types/GameType.tsx';
-import { GameOverStatus } from '../types/GameType.tsx';
-import Cell from './Cell';
-import GameOverModal from './GameOver.tsx';
+import type { Cells } from '../../entities/gameType.ts';
+import { GameOverStatus } from '../../entities/gameType.ts';
+import { Cell } from './Cell';
+import { GameOverModal } from './GameOver.tsx';
 
 type BoardProps = {
-  cells: CellsType;
+  cells: Cells;
   gameOver: GameOverStatus;
   checkInit: () => void;
 };
 
-const Board: React.FC<BoardProps> = ({ cells, gameOver, checkInit }) => {
+export const Board = ({ cells, gameOver, checkInit }: BoardProps) => {
   const totalCellsCount = 16;
 
   const renderBackgroundCell = () => {
@@ -37,10 +36,10 @@ const Board: React.FC<BoardProps> = ({ cells, gameOver, checkInit }) => {
     <GameBoardLayout id="gameboard">
       {renderBackgroundCell()}
       {renderCells()}
-      {gameOver === GameOverStatus.Success && (
+      {gameOver === GameOverStatus.SUCCESS && (
         <GameOverModal checkInit={checkInit} isWon />
       )}
-      {gameOver === GameOverStatus.Fail && (
+      {gameOver === GameOverStatus.FAIL && (
         <GameOverModal checkInit={checkInit} />
       )}
     </GameBoardLayout>
@@ -62,4 +61,3 @@ const GameBoardLayout = styled.div`
   background: ${({ theme }) => theme.color.primary};
   border-radius: 10px;
 `;
-export default Board;

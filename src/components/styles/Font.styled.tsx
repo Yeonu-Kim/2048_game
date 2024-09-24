@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-interface StyledFontProps {
+type StyledFontProps = {
   size?: 'XL' | 'L' | 'R' | 'S';
   bold?: boolean;
   color?:
@@ -10,7 +10,7 @@ interface StyledFontProps {
     | 'secondary'
     | 'secondaryBright'
     | 'inherit';
-}
+};
 
 export const StyledFont = styled.span<StyledFontProps>`
   font-size: ${({ theme, size = 'R' }) => `${theme.font[size]}rem`};

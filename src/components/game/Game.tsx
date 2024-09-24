@@ -1,15 +1,17 @@
 import { useCallback, useEffect } from 'react';
 
-import useGame from '../../hooks/useGame.tsx';
-import Header from '../Header.tsx';
-import { GameOverStatus } from '../types/GameType.tsx';
-import Board from './Board.tsx';
+import { GameOverStatus } from '../../entities/gameType.ts';
+import { useGame } from '../../hooks/useGame.tsx';
+import { saveLocalStorage } from '../../utils/localStorageUtils.ts';
+import { Header } from '../Header.tsx';
+import { Board } from './Board.tsx';
 
-const Game = () => {
+export const Game = () => {
   const {
     cells,
     score,
     highScore,
+    history,
     gameOver,
     checkTurn,
     checkReload,
@@ -19,7 +21,7 @@ const Game = () => {
 
   const getKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      if (gameOver == GameOverStatus.None) {
+      if (gameOver === GameOverStatus.NONE) {
         switch (event.code) {
           case 'ArrowUp':
             event.preventDefault();
@@ -58,6 +60,10 @@ const Game = () => {
     };
   }, [getKeyDown]);
 
+  useEffect(() => {
+    saveLocalStorage({ highScore, cells, history, score, gameOver });
+  }, [highScore, cells, history, score, gameOver]);
+
   return (
     <>
       <Header
@@ -70,5 +76,3 @@ const Game = () => {
     </>
   );
 };
-
-export default Game;

@@ -1,19 +1,18 @@
-import React from 'react';
 import styled, { keyframes } from 'styled-components';
 
-import type { CellType } from '../types/GameType';
+import type { CellType } from '../../entities/gameType.ts';
 
-interface CellProps {
+type CellProps = {
   position: number[];
   value: CellType;
-}
+};
 
-interface StyledCellProps {
+type StyledCellProps = {
   left: number;
   top: number;
-}
+};
 
-const Cell: React.FC<CellProps> = ({ position, value }) => {
+export const Cell = ({ position, value }: CellProps) => {
   const top = position[0] ?? 0;
   const left = position[1] ?? 0;
 
@@ -125,5 +124,3 @@ const Cell64 = styled(StyledCell)`
 const Cell128 = styled(StyledCell)`
   background: #edcf72;
 `;
-
-export default Cell;

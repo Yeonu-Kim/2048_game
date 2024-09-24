@@ -1,7 +1,7 @@
 import type { MouseEvent } from 'react';
 import styled from 'styled-components';
 
-interface StyledButtonProps {
+type StyledButtonProps = {
   color?: 'primary' | 'secondary' | 'white' | 'black';
   background?:
     | 'primary'
@@ -11,7 +11,7 @@ interface StyledButtonProps {
     | 'secondaryBright'
     | 'secondaryDark';
   onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
-}
+};
 
 export const StyledButton = styled.button<StyledButtonProps>`
   padding: 1rem 2rem;

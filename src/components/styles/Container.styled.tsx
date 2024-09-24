@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-interface StyledContainerProps {
+type StyledContainerProps = {
   background?:
     | 'white'
     | 'black'
@@ -21,7 +21,7 @@ interface StyledContainerProps {
   align?: 'left' | 'center' | 'right';
   alignH?: 'left' | 'center' | 'right';
   gap?: number;
-}
+};
 
 const createFlexContainer = (
   direction: 'column' | 'row' = 'column',

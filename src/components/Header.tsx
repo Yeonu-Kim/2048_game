@@ -1,5 +1,3 @@
-import type React from 'react';
-
 import { ScoreBar } from './game/Score.tsx';
 import { StyledButton } from './styles/Button.styled.tsx';
 import {
@@ -10,18 +8,18 @@ import {
 } from './styles/Container.styled.tsx';
 import { StyledFont } from './styles/Font.styled.tsx';
 
-interface HeaderProps {
+type HeaderProps = {
   checkUndo: () => void;
   checkInit: () => void;
   score: number;
   highScore: number;
-}
-const Header: React.FC<HeaderProps> = ({
+};
+export const Header = ({
   score,
   highScore,
   checkUndo,
   checkInit,
-}) => {
+}: HeaderProps) => {
   return (
     <StyledFullContainerH>
       <StyledContainer width={70} color="secondaryDark">
@@ -62,5 +60,3 @@ const Header: React.FC<HeaderProps> = ({
     </StyledFullContainerH>
   );
 };
-
-export default Header;

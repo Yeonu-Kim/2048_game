@@ -1,7 +1,7 @@
 import { StyledContainer } from './styles/Container.styled';
 import { StyledFont } from './styles/Font.styled.tsx';
 
-const Footer = () => {
+export const Footer = () => {
   return (
     <StyledContainer id="how-to-play">
       <StyledFont>
@@ -16,5 +16,3 @@ const Footer = () => {
     </StyledContainer>
   );
 };
-
-export default Footer;
