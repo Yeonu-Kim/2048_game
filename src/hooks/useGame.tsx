@@ -1,8 +1,13 @@
 import { useCallback, useState } from 'react';
 
-import type { Cells, Direction, History } from '../entities/gameType.ts';
+import type {
+  Cells,
+  Direction,
+  History,
+  HistoryList,
+} from '../entities/gameType.ts';
 import { GameOverStatus } from '../entities/gameType.ts';
-import { getHighScore, getScore } from '../usecases/scoreUtils.ts';
+import { getHighScore } from '../usecases/scoreUtils.ts';
 import { undo } from '../usecases/undoUtils.ts';
 import {
   addOneRandomCell,
@@ -24,13 +29,13 @@ export const useGame = () => {
       .fill(null)
       .map(() => Array<null>(4).fill(null)),
   );
-  const [history, setHistory] = useState<History>([]);
+  const [history, setHistory] = useState<HistoryList>([]);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [gameOver, setGameOver] = useState<GameOverStatus>(GameOverStatus.NONE);
 
-  const saveCellsHistory = useCallback((newCells: Cells) => {
-    setHistory((prevHistory) => [...prevHistory, structuredClone(newCells)]);
+  const saveCellsHistory = useCallback((newHistory: History) => {
+    setHistory((prevHistory) => [...prevHistory, structuredClone(newHistory)]);
   }, []);
 
   const checkTurn = useCallback(
@@ -57,7 +62,7 @@ export const useGame = () => {
         }
 
         setCells(newCells);
-        saveCellsHistory(newCells);
+        saveCellsHistory({ cells: newCells, score: newScore });
         setScore(newScore);
         setHighScore(newHighScore);
       }
@@ -71,7 +76,7 @@ export const useGame = () => {
     if (undoResult.currentCell !== undefined) {
       setCells(undoResult.currentCell);
       // 점수 변경
-      const newScore = getScore(undoResult.currentCell);
+      const newScore = undoResult.currentScore ?? 0;
       setScore(newScore);
     }
     setHistory(undoResult.history);
@@ -111,7 +116,7 @@ export const useGame = () => {
 
     setCells(initCells);
     setScore(0);
-    setHistory([initCells]);
+    setHistory([{ cells: initCells, score: 0 }]);
     setGameOver(GameOverStatus.NONE);
 
     // highScore는 다시 로컬스토리지에 저장
