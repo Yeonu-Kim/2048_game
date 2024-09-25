@@ -1,10 +1,8 @@
 import styled, { keyframes } from 'styled-components';
 
-import type { CellType } from '../../entities/gameType.ts';
-
 type CellProps = {
   position: number[];
-  value: CellType;
+  value: number | null;
 };
 
 type StyledCellProps = {
@@ -84,8 +82,12 @@ const StyledCell = styled.div<StyledCellProps>`
   align-items: center;
   justify-content: center;
   position: absolute;
-  top: ${({ theme, top }) => `${(theme.pixel.cellSize + 1) * top}rem`};
-  left: ${({ theme, left }) => `${(theme.pixel.cellSize + 1) * left}rem`};
+  top: 0;
+  left: 0;
+  transform: translate(
+    ${({ theme, top }) => `${(theme.pixel.cellSize + 1) * top}rem`},
+    ${({ theme, left }) => `${(theme.pixel.cellSize + 1) * left}rem`}
+  );
   width: calc(${({ theme }) => theme.pixel.cellSize}rem);
   height: calc(${({ theme }) => theme.pixel.cellSize}rem);
   margin: 14px;

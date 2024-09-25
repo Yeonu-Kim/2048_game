@@ -22,13 +22,18 @@ export const Board = ({ cells, gameOver, checkInit }: BoardProps) => {
 
   const renderCells = () => {
     return cells.map((cellRow, rowIndex) =>
-      cellRow.map((value, colIndex) => (
-        <Cell
-          key={`${rowIndex}-${colIndex}`}
-          position={[rowIndex, colIndex]}
-          value={value}
-        />
-      )),
+      cellRow.map((cell, colIndex) => {
+        if (cell === null) {
+          return null;
+        }
+        return (
+          <Cell
+            key={cell.id}
+            position={[rowIndex, colIndex]}
+            value={cell.value}
+          />
+        );
+      }),
     );
   };
 

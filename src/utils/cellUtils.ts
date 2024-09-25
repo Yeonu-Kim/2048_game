@@ -32,6 +32,8 @@ const moveCellsByDirection = (
   return [rotateDegree[direction], revertDegree[direction]];
 };
 
+const generateCellId = () => Math.random().toString(36).slice(2, 11);
+
 const moveRowLeft = (row: CellType[]) => {
   const reduced = row.reduce(
     (
@@ -44,9 +46,16 @@ const moveRowLeft = (row: CellType[]) => {
         return { ...acc, lastCell: cell };
       } else if (acc.lastCell === cell) {
         return {
-          result: [...acc.result, cell * 2],
+          result: [
+            ...acc.result,
+            {
+              id: generateCellId(),
+              value: acc.lastCell.value * 2,
+              merged: true,
+            },
+          ],
           lastCell: null,
-          addScore: acc.addScore + cell * 2,
+          addScore: acc.addScore + acc.lastCell.value * 2,
         };
       } else {
         return {
@@ -132,8 +141,8 @@ export const checkCanMove = (newCells: Cells) => {
   });
 };
 
-export const is128Exist = (newCells: Cells) => {
-  return newCells.some((row) => row.includes(128));
+export const is128Exist = (newCells: Cells): boolean => {
+  return newCells.some((row) => row.some((cell) => cell?.value === 128));
 };
 
 export const getEmptyCellsIndex = (cells: Cells): [number, number][] => {
@@ -145,14 +154,16 @@ export const getEmptyCellsIndex = (cells: Cells): [number, number][] => {
 };
 
 export const addTwoRandomCells = (cells: Cells): Cells => {
-  const emptyCells = getEmptyCellsIndex(cells);
+  const emptyCells: [number, number][] = getEmptyCellsIndex(cells);
 
-  const randomIndices = emptyCells.sort(() => Math.random() - 0.5).slice(0, 2);
+  const randomIndices: [number, number][] = emptyCells
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 2);
 
-  const newCells = cells.map((row, i) =>
+  const newCells: Cells = cells.map((row, i) =>
     row.map((cell, j) =>
-      randomIndices.some((indice) => indice[0] === i && indice[1] === j)
-        ? 2
+      randomIndices.some(([x, y]) => x === i && y === j)
+        ? { id: generateCellId(), value: 2, merged: false }
         : cell,
     ),
   );
@@ -161,13 +172,16 @@ export const addTwoRandomCells = (cells: Cells): Cells => {
 };
 
 export const addOneRandomCell = (cells: Cells): Cells => {
-  const emptyCells = getEmptyCellsIndex(cells);
+  const emptyCells: [number, number][] = getEmptyCellsIndex(cells);
 
-  const randomIndex = emptyCells.sort(() => Math.random() - 0.5).slice(0, 1);
-  const newCells = cells.map((row, i) =>
+  const randomIndex: [number, number][] = emptyCells
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 1);
+
+  const newCells: Cells = cells.map((row, i) =>
     row.map((cell, j) =>
-      randomIndex.some((indice) => indice[0] === i && indice[1] === j)
-        ? 2
+      randomIndex.some(([x, y]) => x === i && y === j)
+        ? { id: generateCellId(), value: 2, merged: false }
         : cell,
     ),
   );
