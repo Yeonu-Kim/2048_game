@@ -1,4 +1,8 @@
-export type CellType = number | null;
+export type CellType = {
+  id: string;
+  value: number;
+  mergedToId: string | null;
+} | null;
 export type Cells = CellType[][];
 export type History = { cells: Cells; score: number };
 export type HistoryList = History[];

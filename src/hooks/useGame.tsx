@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 
 import type {
   Cells,
+  CellType,
   Direction,
   History,
   HistoryList,
@@ -29,6 +30,7 @@ export const useGame = () => {
       .fill(null)
       .map(() => Array<null>(4).fill(null)),
   );
+  const [mergedCells, setMergedCells] = useState<CellType[]>([]);
   const [history, setHistory] = useState<HistoryList>([]);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
@@ -44,6 +46,7 @@ export const useGame = () => {
       const moveResult = moveCells(cells, direction);
 
       const movedCells = moveResult.result;
+      const newMergedCells = moveResult.mergedCells;
       const newIsMoved = moveResult.isMoved;
       const addScore = moveResult.addScore;
 
@@ -62,6 +65,7 @@ export const useGame = () => {
         }
 
         setCells(newCells);
+        setMergedCells(newMergedCells);
         saveCellsHistory({ cells: newCells, score: newScore });
         setScore(newScore);
         setHighScore(newHighScore);
@@ -101,7 +105,6 @@ export const useGame = () => {
       setCells(data.cells ?? initCells);
       setHistory(data.history ?? [{ cells: initCells, score: 0 }]);
     }
-
     setScore(data.score ?? 0);
     setHighScore(data.highScore ?? 0);
     setGameOver(data.gameOver ?? GameOverStatus.NONE);
@@ -128,6 +131,7 @@ export const useGame = () => {
 
   return {
     cells,
+    mergedCells,
     score,
     highScore,
     history,

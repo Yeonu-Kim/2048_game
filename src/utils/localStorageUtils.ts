@@ -1,5 +1,6 @@
 import type { Cells, HistoryList } from '../entities/gameType.ts';
 import { GameOverStatus, LocalStorageKey } from '../entities/gameType.ts';
+import { getEmptyCellsIndex } from './cellUtils.ts';
 
 type BodyProps = {
   cells?: Cells;
@@ -10,16 +11,19 @@ type BodyProps = {
 };
 
 export const saveLocalStorage = (body: BodyProps) => {
-  if (body.cells !== undefined) {
+  if (
+    body.cells !== undefined &&
+    getEmptyCellsIndex(body.cells).length !== 16
+  ) {
     localStorage.setItem(LocalStorageKey.CELLS, JSON.stringify(body.cells));
   }
-  if (body.history !== undefined) {
+  if (body.history !== undefined && body.history.length !== 0) {
     localStorage.setItem(LocalStorageKey.HISTORY, JSON.stringify(body.history));
   }
-  if (body.score !== undefined) {
+  if (body.score !== undefined && body.score !== 0) {
     localStorage.setItem(LocalStorageKey.SCORE, JSON.stringify(body.score));
   }
-  if (body.highScore !== undefined) {
+  if (body.highScore !== undefined && body.highScore !== 0) {
     localStorage.setItem(
       LocalStorageKey.HIGHSCORE,
       JSON.stringify(body.highScore),
@@ -47,7 +51,7 @@ export const getLocalData = (): BodyProps => {
   if (storedCells !== null) {
     try {
       data[LocalStorageKey.CELLS] = JSON.parse(storedCells) as Cells;
-    } catch {
+    } catch (error) {
       // 잘못 저장된 item 삭제
       window.localStorage.removeItem(LocalStorageKey.CELLS);
     }
