@@ -37,25 +37,38 @@ const generateCellId = () => Math.random().toString(36).slice(2, 11);
 const moveRowLeft = (row: CellType[]) => {
   const reduced = row.reduce(
     (
-      acc: { lastCell: CellType; result: CellType[]; addScore: number },
+      acc: {
+        lastCell: CellType;
+        result: CellType[];
+        mergedCells: CellType[];
+        addScore: number;
+      },
       cell,
     ) => {
       if (cell === null) {
         return acc;
       } else if (acc.lastCell === null) {
         return { ...acc, lastCell: cell };
-      } else if (acc.lastCell === cell) {
+      } else if (acc.lastCell.value === cell.value) {
+        const newCellId = generateCellId();
+        const newCell = {
+          id: newCellId,
+          value: cell.value * 2,
+          mergedToId: null,
+        };
+        const movedLastCell = {
+          ...acc.lastCell,
+          mergedToId: newCellId,
+        };
+        const movedCell = {
+          ...cell,
+          mergedToId: newCellId,
+        };
         return {
-          result: [
-            ...acc.result,
-            {
-              id: generateCellId(),
-              value: acc.lastCell.value * 2,
-              merged: true,
-            },
-          ],
+          result: [...acc.result, newCell],
+          mergedCells: [...acc.mergedCells, movedLastCell, movedCell],
           lastCell: null,
-          addScore: acc.addScore + acc.lastCell.value * 2,
+          addScore: acc.addScore + cell.value * 2,
         };
       } else {
         return {
@@ -65,7 +78,7 @@ const moveRowLeft = (row: CellType[]) => {
         };
       }
     },
-    { lastCell: null, result: [], addScore: 0 },
+    { lastCell: null, result: [], mergedCells: [], addScore: 0 },
   );
 
   const result = [...reduced.result, reduced.lastCell];
@@ -76,20 +89,26 @@ const moveRowLeft = (row: CellType[]) => {
 
   return {
     result: resultRow,
-    isMoved: row.some((cell, i) => cell !== resultRow[i]),
+    mergedCells: reduced.mergedCells,
+    isMoved: row.some((cell, i) =>
+      cell !== null ? cell.id !== resultRow[i]?.id : false,
+    ),
     addScore: reduced.addScore,
   };
 };
 
 const moveLeft = (rotatedCells: Cells) => {
   const movedRows = rotatedCells.map(moveRowLeft);
+
   const result = movedRows.map((movedRow) => movedRow.result);
+  const mergedCells = movedRows.flatMap((movedRow) => movedRow.mergedCells);
   const isMoved = movedRows.some((movedRow) => movedRow.isMoved);
   const addScore = movedRows.reduce(
     (acc, movedRow) => acc + movedRow.addScore,
     0,
   );
-  return { result, isMoved, addScore };
+
+  return { result, mergedCells, isMoved, addScore };
 };
 
 const rotateMapCounterClockwise = (prevCells: Cells, degree: RotateDegree) => {
@@ -104,10 +123,10 @@ const rotateMapCounterClockwise = (prevCells: Cells, degree: RotateDegree) => {
         ),
       );
     case 180:
-      return Array.from({ length: 4 }, (_, rowIndex) =>
+      return Array.from({ length: 4 }, (_, colIndex) =>
         Array.from(
           { length: 4 },
-          (__, colIndex) => prevCells[3 - rowIndex]?.[3 - colIndex] ?? null,
+          (__, rowIndex) => prevCells[3 - colIndex]?.[3 - rowIndex] ?? null,
         ),
       );
     case 270:
@@ -124,8 +143,10 @@ export const moveCells = (cells: Cells, direction: Direction) => {
   const [rotateDirection, revertDirection] = moveCellsByDirection(direction);
   const rotatedCells = rotateMapCounterClockwise(cells, rotateDirection);
   const moveResult = moveLeft(rotatedCells);
+
   return {
     result: rotateMapCounterClockwise(moveResult.result, revertDirection),
+    mergedCells: moveResult.mergedCells,
     isMoved: moveResult.isMoved,
     addScore: moveResult.addScore,
   };
@@ -160,10 +181,14 @@ export const addTwoRandomCells = (cells: Cells): Cells => {
     .sort(() => Math.random() - 0.5)
     .slice(0, 2);
 
-  const newCells: Cells = cells.map((row, i) =>
-    row.map((cell, j) =>
-      randomIndices.some(([x, y]) => x === i && y === j)
-        ? { id: generateCellId(), value: 2, merged: false }
+  const newCells: Cells = cells.map((row, colIndex) =>
+    row.map((cell, rowIndex) =>
+      randomIndices.some(([x, y]) => x === colIndex && y === rowIndex)
+        ? {
+            id: generateCellId(),
+            value: 2,
+            mergedToId: null,
+          }
         : cell,
     ),
   );
@@ -178,10 +203,14 @@ export const addOneRandomCell = (cells: Cells): Cells => {
     .sort(() => Math.random() - 0.5)
     .slice(0, 1);
 
-  const newCells: Cells = cells.map((row, i) =>
-    row.map((cell, j) =>
-      randomIndex.some(([x, y]) => x === i && y === j)
-        ? { id: generateCellId(), value: 2, merged: false }
+  const newCells: Cells = cells.map((row, colIndex) =>
+    row.map((cell, rowIndex) =>
+      randomIndex.some(([x, y]) => x === colIndex && y === rowIndex)
+        ? {
+            id: generateCellId(),
+            value: 2,
+            mergedToId: null,
+          }
         : cell,
     ),
   );

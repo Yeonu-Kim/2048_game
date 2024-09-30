@@ -1,7 +1,7 @@
 export type CellType = {
   id: string;
   value: number;
-  merged: boolean;
+  mergedToId: string | null;
 } | null;
 export type Cells = CellType[][];
 export type History = { cells: Cells; score: number };

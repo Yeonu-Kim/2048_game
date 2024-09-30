@@ -9,6 +9,7 @@ import { Board } from './Board.tsx';
 export const Game = () => {
   const {
     cells,
+    mergedCells,
     score,
     highScore,
     history,
@@ -72,7 +73,12 @@ export const Game = () => {
         checkUndo={checkUndo}
         checkInit={checkInit}
       />
-      <Board cells={cells} gameOver={gameOver} checkInit={checkInit} />
+      <Board
+        cells={cells}
+        mergedCells={mergedCells}
+        gameOver={gameOver}
+        checkInit={checkInit}
+      />
     </>
   );
 };

@@ -1,60 +1,53 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 type CellProps = {
-  position: number[];
   value: number | null;
-};
-
-type StyledCellProps = {
   left: number;
   top: number;
 };
 
-export const Cell = ({ position, value }: CellProps) => {
-  const top = position[0] ?? 0;
-  const left = position[1] ?? 0;
-
+export const Cell = ({ left, top, value }: CellProps) => {
   const getCell = () => {
     switch (value) {
       case 2:
         return (
-          <Cell2 left={left} top={top}>
+          <Cell2 left={left} top={top} value={value}>
             {value}
           </Cell2>
         );
       case 4:
         return (
-          <Cell4 left={left} top={top}>
+          <Cell4 left={left} top={top} value={value}>
             {value}
           </Cell4>
         );
       case 8:
         return (
-          <Cell8 left={left} top={top}>
+          <Cell8 left={left} top={top} value={value}>
             {value}
           </Cell8>
         );
       case 16:
         return (
-          <Cell16 left={left} top={top}>
+          <Cell16 left={left} top={top} value={value}>
             {value}
           </Cell16>
         );
       case 32:
         return (
-          <Cell32 left={left} top={top}>
+          <Cell32 left={left} top={top} value={value}>
             {value}
           </Cell32>
         );
       case 64:
         return (
-          <Cell64 left={left} top={top}>
+          <Cell64 left={left} top={top} value={value}>
             {value}
           </Cell64>
         );
       case 128:
         return (
-          <Cell128 left={left} top={top}>
+          <Cell128 left={left} top={top} value={value}>
             {value}
           </Cell128>
         );
@@ -66,18 +59,7 @@ export const Cell = ({ position, value }: CellProps) => {
   return <>{getCell()}</>;
 };
 
-const show = keyframes`
-  0% {
-    opacity: 0.5;
-    transform: scale(0);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-`;
-
-const StyledCell = styled.div<StyledCellProps>`
+const StyledCell = styled.div<CellProps>`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -85,8 +67,8 @@ const StyledCell = styled.div<StyledCellProps>`
   top: 0;
   left: 0;
   transform: translate(
-    ${({ theme, top }) => `${(theme.pixel.cellSize + 1) * top}rem`},
-    ${({ theme, left }) => `${(theme.pixel.cellSize + 1) * left}rem`}
+    ${({ theme, left }) => `${(theme.pixel.cellSize + 1) * left}rem`},
+    ${({ theme, top }) => `${(theme.pixel.cellSize + 1) * top}rem`}
   );
   width: calc(${({ theme }) => theme.pixel.cellSize}rem);
   height: calc(${({ theme }) => theme.pixel.cellSize}rem);
@@ -95,9 +77,8 @@ const StyledCell = styled.div<StyledCellProps>`
   font-size: 3.2rem;
   font-weight: bold;
   color: ${({ theme }) => theme.color.secondaryDark};
-  transition-property: left, top, transform;
-  transition-duration: 200ms, 200ms, 100ms;
-  animation: ${show} 200ms ease-in-out;
+  transition: all 200ms ease-out;
+  z-index: ${({ value }) => `${value ?? 0}`};
 `;
 
 const Cell2 = styled(StyledCell)`
