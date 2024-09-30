@@ -54,6 +54,8 @@ const moveRowLeft = (row: CellType[]) => {
         const newCell = {
           id: newCellId,
           value: cell.value * 2,
+          row: null,
+          col: null,
           mergedToId: null,
         };
         const movedLastCell = {
@@ -187,6 +189,8 @@ export const addTwoRandomCells = (cells: Cells): Cells => {
         ? {
             id: generateCellId(),
             value: 2,
+            row: null,
+            col: null,
             mergedToId: null,
           }
         : cell,
@@ -209,6 +213,8 @@ export const addOneRandomCell = (cells: Cells): Cells => {
         ? {
             id: generateCellId(),
             value: 2,
+            row: null,
+            col: null,
             mergedToId: null,
           }
         : cell,

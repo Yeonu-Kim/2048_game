@@ -1,6 +1,8 @@
 export type CellType = {
   id: string;
   value: number;
+  row: number | null;
+  col: number | null;
   mergedToId: string | null;
 } | null;
 export type Cells = CellType[][];

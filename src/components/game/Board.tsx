@@ -27,8 +27,6 @@ export const Board = ({
   };
 
   const renderCells = () => {
-    // 의문점: 왜 이차원 배열 상태에서 각 열마다 렌더링하면 상하 이동 시 애니메이션이 안 먹을까
-    // 일차원 배열로 변환해서 진행함.
     const flattenedCells = cells.flat();
     return flattenedCells.map((cell, index) => {
       if (cell === null) {
@@ -38,9 +36,7 @@ export const Board = ({
       const colIndex = Math.floor(index / 4);
       const rowIndex = index % 4;
 
-      return (
-        <Cell key={cell.id} left={rowIndex} top={colIndex} value={cell.value} />
-      );
+      return { ...cell, row: rowIndex, col: colIndex };
     });
   };
 
@@ -62,25 +58,23 @@ export const Board = ({
         const colIndex = Math.floor(originalCellIndex / 4);
         const rowIndex = originalCellIndex % 4;
 
-        return (
-          <Cell
-            key={mergedCell.id}
-            left={rowIndex}
-            top={colIndex}
-            value={mergedCell.value}
-          />
-        );
+        return { ...mergedCell, row: rowIndex, col: colIndex };
       });
   };
 
   const renderAllCells = () => {
-    // 셀을 하나의 JSX 배열로 묶어서 전달
     const regularCells = renderCells();
     const mergedCellsRender = renderMergedCells();
 
-    const allCells = [...regularCells, ...mergedCellsRender];
+    const allCells = [...regularCells, ...mergedCellsRender]
+      .filter((cell) => cell !== null)
+      .sort((firstCell, secondCell) =>
+        firstCell.id.localeCompare(secondCell.id),
+      );
 
-    return allCells;
+    return allCells.map((cell) => (
+      <Cell key={cell.id} left={cell.row} top={cell.col} value={cell.value} />
+    ));
   };
 
   return (
