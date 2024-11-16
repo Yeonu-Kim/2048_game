@@ -8,23 +8,9 @@ import type {
   HistoryList,
 } from '../entities/gameType.ts';
 import { GameOverStatus } from '../entities/gameType.ts';
-import { getHighScore } from '../usecases/scoreUtils.ts';
-import { undo } from '../usecases/undoUtils.ts';
-import {
-  addOneRandomCell,
-  addTwoRandomCells,
-  checkCanMove,
-  getEmptyCellsIndex,
-  is128Exist,
-  moveCells,
-} from '../utils/cellUtils.ts';
-import {
-  getLocalData,
-  resetLocalStorage,
-  saveLocalStorage,
-} from '../utils/localStorageUtils.ts';
+import type { Services } from '../entities/Service.ts';
 
-export const useGame = () => {
+export const useGame = ({ services }: { services: Services }) => {
   const [cells, setCells] = useState<Cells>(
     Array<null>(4)
       .fill(null)
@@ -36,6 +22,8 @@ export const useGame = () => {
   const [highScore, setHighScore] = useState(0);
   const [gameOver, setGameOver] = useState<GameOverStatus>(GameOverStatus.NONE);
 
+  const { cellService, scoreService, undoService } = services;
+
   const saveCellsHistory = useCallback((newHistory: History) => {
     setHistory((prevHistory) => [...prevHistory, structuredClone(newHistory)]);
   }, []);
@@ -43,7 +31,7 @@ export const useGame = () => {
   const checkTurn = useCallback(
     (direction: Direction) => {
       // 셀 이동
-      const moveResult = moveCells(cells, direction);
+      const moveResult = cellService.moveCells(cells, direction);
 
       const movedCells = moveResult.result;
       const newMergedCells = moveResult.mergedCells;
@@ -51,16 +39,16 @@ export const useGame = () => {
       const addScore = moveResult.addScore;
 
       if (newIsMoved) {
-        const newCells = addOneRandomCell(movedCells);
+        const newCells = cellService.addOneRandomCell(movedCells);
 
         // 점수 연산
         const newScore = score + addScore;
-        const newHighScore = getHighScore(newScore, highScore);
+        const newHighScore = scoreService.getHighScore(newScore, highScore);
 
         // 다음 턴 진행 가능한지 확인
-        if (is128Exist(newCells)) {
+        if (cellService.is128Exist(newCells)) {
           setGameOver(GameOverStatus.SUCCESS);
-        } else if (!checkCanMove(newCells)) {
+        } else if (!cellService.checkCanMove(newCells)) {
           setGameOver(GameOverStatus.FAIL);
         }
 
@@ -71,11 +59,11 @@ export const useGame = () => {
         setHighScore(newHighScore);
       }
     },
-    [score, cells, highScore, saveCellsHistory],
+    [score, cells, highScore, cellService, scoreService, saveCellsHistory],
   );
 
   const checkUndo = () => {
-    const undoResult = undo(history);
+    const undoResult = undoService.undo(history);
 
     if (undoResult.currentCell !== undefined) {
       setCells(undoResult.currentCell);
@@ -87,17 +75,17 @@ export const useGame = () => {
   };
 
   const checkReload = useCallback(() => {
-    const data = getLocalData();
+    const data = cellService.getData();
 
     const emptyCells = Array<null>(4)
       .fill(null)
       .map(() => Array<null>(4).fill(null));
-    const initCells = addTwoRandomCells(emptyCells);
+    const initCells = cellService.addTwoRandomCells(emptyCells);
 
     // 로컬스토리지에 데이터가 있으면 해당 데이터로 불러오기
     if (
       data.cells !== undefined &&
-      getEmptyCellsIndex(data.cells).length === 16
+      cellService.getEmptyCellsIndex(data.cells).length === 16
     ) {
       setCells(initCells);
       setHistory([{ cells: initCells, score: 0 }]);
@@ -108,15 +96,15 @@ export const useGame = () => {
     setScore(data.score ?? 0);
     setHighScore(data.highScore ?? 0);
     setGameOver(data.gameOver ?? GameOverStatus.NONE);
-  }, []);
+  }, [cellService]);
 
   const checkInit = () => {
-    resetLocalStorage();
+    cellService.resetData();
 
     const emptyCells = Array<null>(4)
       .fill(null)
       .map(() => Array<null>(4).fill(null));
-    const initCells = addTwoRandomCells(emptyCells);
+    const initCells = cellService.addTwoRandomCells(emptyCells);
 
     setCells(initCells);
     setScore(0);
@@ -124,7 +112,7 @@ export const useGame = () => {
     setGameOver(GameOverStatus.NONE);
 
     // highScore는 다시 로컬스토리지에 저장
-    saveLocalStorage({
+    cellService.saveData({
       highScore: highScore,
     });
   };
