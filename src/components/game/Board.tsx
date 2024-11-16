@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
-import type { Cells, CellType } from '../../entities/gameType.ts';
-import { GameOverStatus } from '../../entities/gameType.ts';
-import { Cell } from './Cell';
-import { GameOverModal } from './GameOver.tsx';
+import { Cell } from '@/components/game/Cell';
+import { GameOverModal } from '@/components/game/GameOver';
+import type { Cells, CellType } from '@/entities/gameType';
+import { GameOverStatus } from '@/entities/gameType';
 
 type BoardProps = {
   cells: Cells;

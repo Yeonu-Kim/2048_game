@@ -1,12 +1,12 @@
 import { ThemeProvider } from 'styled-components';
 
-import GlobalStyles from './components/styles/GlobalStyle.styled.tsx';
-import theme from './components/styles/theme.tsx';
-import { implLocalStorageRepository } from './infrastructure/localStorageRepository.ts';
-import { MainPage } from './page/MainPage.tsx';
-import { implCellService } from './usecases/cellService.ts';
-import { implScoreService } from './usecases/scoreService.ts';
-import { implUndoService } from './usecases/undoService.ts';
+import GlobalStyles from './components/styles/GlobalStyle.styled';
+import theme from './components/styles/theme';
+import { implLocalStorageRepository } from './infrastructure/localStorageRepository';
+import { MainPage } from './page/MainPage';
+import { implCellService } from './usecases/cellService';
+import { implScoreService } from './usecases/scoreService';
+import { implUndoService } from './usecases/undoService';
 
 function App() {
   const localStorageRepository = implLocalStorageRepository();

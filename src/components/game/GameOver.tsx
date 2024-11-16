@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-import { StyledButton } from '../styles/Button.styled';
-import { StyledContainer } from '../styles/Container.styled';
-import { StyledFont } from '../styles/Font.styled';
+import { StyledButton } from '@/components/styles/Button.styled';
+import { StyledContainer } from '@/components/styles/Container.styled';
+import { StyledFont } from '@/components/styles/Font.styled';
 
 type GameOverModalProps = {
   isWon?: boolean;

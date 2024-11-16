@@ -1,12 +1,12 @@
-import { ScoreBar } from './game/Score.tsx';
-import { StyledButton } from './styles/Button.styled.tsx';
+import { ScoreBar } from '@/components/game/Score';
+import { StyledButton } from '@/components/styles/Button.styled';
 import {
   StyledContainer,
   StyledContainerH,
   StyledFullContainer,
   StyledFullContainerH,
-} from './styles/Container.styled.tsx';
-import { StyledFont } from './styles/Font.styled.tsx';
+} from '@/components/styles/Container.styled';
+import { StyledFont } from '@/components/styles/Font.styled';
 
 type HeaderProps = {
   checkUndo: () => void;

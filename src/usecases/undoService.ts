@@ -1,4 +1,4 @@
-import type { Cells, HistoryList } from '../entities/gameType.ts';
+import type { Cells, HistoryList } from '@/entities/gameType';
 
 type UndoProps = {
   history: HistoryList;

@@ -1,5 +1,5 @@
-import type { Cells, HistoryList } from '../entities/gameType.ts';
-import { GameOverStatus, LocalStorageKey } from '../entities/gameType.ts';
+import type { Cells, HistoryList } from '@/entities/gameType';
+import { GameOverStatus, LocalStorageKey } from '@/entities/gameType';
 
 type BodyProps = {
   cells?: Cells;
