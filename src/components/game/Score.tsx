@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { StyledContainer } from '../styles/Container.styled.tsx';
+import { StyledContainer } from '../styles/Container.styled';
 import { StyledFont } from '../styles/Font.styled';
 
 type ScoreBarProps = {
