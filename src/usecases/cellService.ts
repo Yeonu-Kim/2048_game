@@ -5,8 +5,8 @@ import type {
   GameOverStatus,
   HistoryList,
   RotateDegree,
-} from '../entities/gameType';
-import type { LocalStorageRepository } from '../infrastructure/localStorageRepository';
+} from '@/entities/gameType';
+import type { LocalStorageRepository } from '@/infrastructure/localStorageRepository';
 
 type DirectionDegreeProps = {
   up: RotateDegree;

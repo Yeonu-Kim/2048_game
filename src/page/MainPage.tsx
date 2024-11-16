@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
-import { Footer } from '../components/Footer';
-import { Game } from '../components/game/Game';
-import { StyledContainer } from '../components/styles/Container.styled';
-import type { Services } from '../entities/Service';
+import { Footer } from '@/components/Footer';
+import { Game } from '@/components/game/Game';
+import { StyledContainer } from '@/components/styles/Container.styled';
+import type { Services } from '@/entities/Service';
 
 export const MainPage = ({ services }: { services: Services }) => {
   return (

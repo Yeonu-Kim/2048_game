@@ -1,5 +1,5 @@
-import { StyledContainer } from './styles/Container.styled';
-import { StyledFont } from './styles/Font.styled';
+import { StyledContainer } from '@/components/styles/Container.styled';
+import { StyledFont } from '@/components/styles/Font.styled';
 
 export const Footer = () => {
   return (

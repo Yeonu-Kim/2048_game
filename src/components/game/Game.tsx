@@ -1,10 +1,10 @@
 import { useCallback, useEffect } from 'react';
 
-import { GameOverStatus } from '../../entities/gameType';
-import type { Services } from '../../entities/Service';
-import { useGame } from '../../hooks/useGame';
-import { Header } from '../Header';
-import { Board } from './Board';
+import { Board } from '@/components/game/Board';
+import { Header } from '@/components/Header';
+import { GameOverStatus } from '@/entities/gameType';
+import type { Services } from '@/entities/Service';
+import { useGame } from '@/hooks/useGame';
 
 export const Game = ({ services }: { services: Services }) => {
   const {

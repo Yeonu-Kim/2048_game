@@ -6,9 +6,9 @@ import type {
   Direction,
   History,
   HistoryList,
-} from '../entities/gameType';
-import { GameOverStatus } from '../entities/gameType';
-import type { Services } from '../entities/Service';
+} from '@/entities/gameType';
+import { GameOverStatus } from '@/entities/gameType';
+import type { Services } from '@/entities/Service';
 
 export const useGame = ({ services }: { services: Services }) => {
   const [cells, setCells] = useState<Cells>(

@@ -1,4 +1,4 @@
-interface ColorProps {
+type ColorProps = {
   default: string;
   black: string;
   white: string;
@@ -7,18 +7,18 @@ interface ColorProps {
   secondary: string;
   secondaryBright: string;
   secondaryDark: string;
-}
+};
 
-interface FontSizeProps {
+type FontSizeProps = {
   XL: number;
   L: number;
   R: number;
   S: number;
-}
+};
 
-interface PixelProps {
+type PixelProps = {
   cellSize: number;
-}
+};
 
 const color: ColorProps = {
   default: 'transparent',
