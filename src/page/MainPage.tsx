@@ -3,12 +3,13 @@ import styled from 'styled-components';
 import { Footer } from '../components/Footer.tsx';
 import { Game } from '../components/game/Game.tsx';
 import { StyledContainer } from '../components/styles/Container.styled.tsx';
+import type { Services } from '../entities/Service.ts';
 
-export const MainPage = () => {
+export const MainPage = ({ services }: { services: Services }) => {
   return (
     <StyledBackground>
       <StyledMainContainer gap={5}>
-        <Game />
+        <Game services={services} />
         <Footer />
       </StyledMainContainer>
     </StyledBackground>

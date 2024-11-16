@@ -23,7 +23,7 @@ export const GameOverModal = ({
 const StyledModal = styled(StyledContainer)`
   position: absolute;
   text-align: center;
-  z-index: 1;
+  z-index: 129;
   top: 0;
   left: 0;
   right: 0;

@@ -1,12 +1,12 @@
 import { useCallback, useEffect } from 'react';
 
 import { GameOverStatus } from '../../entities/gameType.ts';
+import type { Services } from '../../entities/Service.ts';
 import { useGame } from '../../hooks/useGame.tsx';
-import { saveLocalStorage } from '../../utils/localStorageUtils.ts';
 import { Header } from '../Header.tsx';
 import { Board } from './Board.tsx';
 
-export const Game = () => {
+export const Game = ({ services }: { services: Services }) => {
   const {
     cells,
     mergedCells,
@@ -18,7 +18,9 @@ export const Game = () => {
     checkReload,
     checkUndo,
     checkInit,
-  } = useGame();
+  } = useGame({ services });
+
+  const { cellService } = services;
 
   const getKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -62,8 +64,8 @@ export const Game = () => {
   }, [getKeyDown]);
 
   useEffect(() => {
-    saveLocalStorage({ highScore, cells, history, score, gameOver });
-  }, [highScore, cells, history, score, gameOver]);
+    cellService.saveData({ highScore, cells, history, score, gameOver });
+  }, [highScore, cells, history, score, gameOver, cellService]);
 
   return (
     <>
