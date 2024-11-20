@@ -6,13 +6,14 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "test": "vitest",
     "types:check": "tsc",
     "format:check": "prettier --check .",
     "format:fix": "prettier --write .",
     "lint:check": "eslint .",
     "lint:fix": "eslint --fix .",
     "unused:check": "knip",
-    "check-all": "yarn types:check && yarn format:check && yarn lint:check && yarn unused:check"
+    "check-all": "yarn types:check && yarn format:check && yarn lint:check && yarn unused:check && yarn test"
   },
   "dependencies": {
     "@types/styled-components": "^5.1.34",
