@@ -71,6 +71,6 @@ test('움직일 수 있는 타일이 있다면 움직인다.', () => {
   expect(cellService.checkCanMove(canMoveTestCells)).toBe(true);
 });
 
-test('움직일 수 있는 타일이 있다면 움직인다.', () => {
+test('움직일 수 없는 타일이 있다면 움직이지 않는다.', () => {
   expect(cellService.checkCanMove(cannotMoveTestCells)).toBe(false);
 });
